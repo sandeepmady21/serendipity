@@ -6,7 +6,7 @@
     3. Put all 3 files - index.html, script.js and styles.css in one folder
     4. Open index.html in browser
 
-### Features: 
+### Implemented Features: 
     1. Clickable simple content tree for navigation
     2. Creates nesting extracts and flashcards
     3. Editable topics, extracts and flashcard questions
