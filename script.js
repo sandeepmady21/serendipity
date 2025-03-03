@@ -6,6 +6,8 @@
  * - Inline content editing (edit text directly)
  * - Content tree navigation
  * - Flashcards with spaced repetition
+ * - Cloze deletions
+ * - Search functionality
  */
 
 // ========================
@@ -65,6 +67,12 @@ const LLMService = {
      */
     renderContentTree() {
       const treeContainer = document.getElementById('contentTree');
+      if (!treeContainer) {
+        console.error('Content tree container not found');
+        return;
+      }
+      
+      // Clear the container
       treeContainer.innerHTML = '';
       
       // Get references to the current active item
@@ -73,8 +81,8 @@ const LLMService = {
       // First add all topics
       ContentManager.sections.forEach(section => {
         const topicId = section.id;
-        const topicTitle = section.querySelector('h2').textContent;
-        const topicType = section.getAttribute('data-topic');
+        const topicTitle = section.querySelector('h2')?.textContent || 'Untitled Topic';
+        const topicType = section.getAttribute('data-topic') || '';
         
         // Create topic item
         const topicElement = document.createElement('div');
@@ -94,104 +102,97 @@ const LLMService = {
         
         treeContainer.appendChild(topicElement);
         
-        // Add a recursive function to add extracts and their children
+        // Add extracts and their children under this topic
         this.addExtractsToTree(treeContainer, topicId, currentItem, 0);
       });
     },
     
     /**
-   * Recursively add extracts and their child extracts to the tree
-   * @param {HTMLElement} container - Container element to add items to
-   * @param {string} parentId - ID of the parent element
-   * @param {Object} currentItem - Currently active item (if any)
-   * @param {number} level - Nesting level (0 = direct child of topic)
-   */
-  addExtractsToTree(container, parentId, currentItem, level) {
-    // Get direct extracts for this parent
-    const extracts = ContentManager.getDirectChildren(parentId);
-    
-    extracts.forEach(extractId => {
-      const extract = document.getElementById(extractId);
-      if (!extract) return; // Skip if extract doesn't exist
+     * Recursively add extracts and their child extracts to the tree
+     * @param {HTMLElement} container - Container element to add items to
+     * @param {string} parentId - ID of the parent element
+     * @param {Object} currentItem - Currently active item (if any)
+     * @param {number} level - Nesting level (0 = direct child of topic)
+     */
+    addExtractsToTree(container, parentId, currentItem, level) {
+      // Get direct extracts for this parent
+      let extracts = ContentManager.getDirectChildren(parentId);
       
-      // Get first sentence from extract text
-      const extractText = extract.querySelector('p').textContent;
-      const firstSentenceMatch = extractText.match(/^[^.!?]+[.!?]/);
-      let displayText = firstSentenceMatch ? firstSentenceMatch[0].trim() : extractText.substring(0, 60) + "...";
-      
-      // Truncate if too long
-      displayText = this.truncateText(displayText, 60);
-      
-      // Choose CSS class based on nesting level
-      let treeItemClass = 'tree-item tree-extract';
-      if (level === 1) {
-        treeItemClass = 'tree-item tree-nested-extract';
-      } else if (level >= 2) {
-        treeItemClass = 'tree-item tree-deep-nested-extract';
+      // Check if we have valid data
+      if (!Array.isArray(extracts)) {
+        console.error(`Invalid extracts array for parent ${parentId}:`, extracts);
+        extracts = [];
       }
       
-      // Create extract item
-      const extractElement = document.createElement('div');
-      extractElement.className = treeItemClass;
-      extractElement.setAttribute('data-id', extractId);
-      extractElement.textContent = displayText;
-      extractElement.title = extractText; // Show full text on hover
-      
-      // Make it active if this is the current item
-      if (currentItem && currentItem.id === extractId) {
-        extractElement.classList.add('active');
-      }
-      
-      // Add extract click handler
-      extractElement.addEventListener('click', () => {
-        this.navigateToItem(extractId);
+      extracts.forEach(extractId => {
+        const extract = document.getElementById(extractId);
+        if (!extract) {
+          console.warn(`Extract element not found for ID: ${extractId}`);
+          return; // Skip if extract doesn't exist
+        }
+        
+        // Get first sentence from extract text
+        const extractText = extract.querySelector('p')?.textContent || '';
+        const firstSentenceMatch = extractText.match(/^[^.!?]+[.!?]/);
+        let displayText = firstSentenceMatch 
+          ? firstSentenceMatch[0].trim() 
+          : (extractText.substring(0, 60) + (extractText.length > 60 ? "..." : ""));
+        
+        // Choose CSS class based on nesting level
+        let treeItemClass = 'tree-item tree-extract';
+        if (level === 1) {
+          treeItemClass = 'tree-item tree-nested-extract';
+        } else if (level >= 2) {
+          treeItemClass = 'tree-item tree-deep-nested-extract';
+        }
+        
+        // Create extract item
+        const extractElement = document.createElement('div');
+        extractElement.className = treeItemClass;
+        extractElement.setAttribute('data-id', extractId);
+        extractElement.setAttribute('data-level', level);
+        extractElement.textContent = displayText;
+        extractElement.title = extractText; // Show full text on hover
+        
+        // Make it active if this is the current item
+        if (currentItem && currentItem.id === extractId) {
+          extractElement.classList.add('active');
+        }
+        
+        // Add extract click handler
+        extractElement.addEventListener('click', () => {
+          this.navigateToItem(extractId);
+        });
+        
+        container.appendChild(extractElement);
+        
+        // Add flashcards for this extract
+        this.addFlashcardsToTree(container, extractId, currentItem);
+        
+        // Recursively add child extracts
+        this.addExtractsToTree(container, extractId, currentItem, level + 1);
       });
-      
-      container.appendChild(extractElement);
-      
-      // Create a container for extract's children (flashcards and nested extracts)
-      const extractChildrenContainer = document.createElement('div');
-      extractChildrenContainer.className = 'extract-children';
-      extractChildrenContainer.style.marginLeft = '15px'; // Proper indentation
-      container.appendChild(extractChildrenContainer);
-      
-      // Add flashcards for this extract to the extract's children container
-      this.addFlashcardsToTree(extractChildrenContainer, extractId, currentItem);
-      
-      // Recursively add child extracts to the extract's children container
-      this.addNestedExtracts(extractChildrenContainer, extractId, currentItem, level + 1);
-    });
-  },
-  
-  /**
-   * Add nested extracts to the tree (extracted from addExtractsToTree to separate concerns)
-   * @param {HTMLElement} container - Container element to add items to
-   * @param {string} parentId - ID of the parent extract
-   * @param {Object} currentItem - Currently active item (if any)
-   * @param {number} level - Nesting level
-   */
-  addNestedExtracts(container, parentId, currentItem, level) {
-    // Get direct nested extracts for this parent extract
-    const nestedExtracts = ContentManager.getDirectChildren(parentId);
+    },
     
-    if (nestedExtracts.length > 0) {
-      this.addExtractsToTree(container, parentId, currentItem, level);
-    }
-  },
-  
-  /**
-   * Add flashcards for an extract to the tree
-   * @param {HTMLElement} container - Container element to add items to
-   * @param {string} extractId - ID of the parent extract
-   * @param {Object} currentItem - Currently active item (if any)
-   */
-  addFlashcardsToTree(container, extractId, currentItem) {
-    if (ContentManager.extractFlashcards[extractId]) {
-      ContentManager.extractFlashcards[extractId].forEach(cardId => {
+    /**
+     * Add flashcards for an extract to the tree
+     * @param {HTMLElement} container - Container element to add items to
+     * @param {string} extractId - ID of the parent extract
+     * @param {Object} currentItem - Currently active item (if any)
+     */
+    addFlashcardsToTree(container, extractId, currentItem) {
+      const flashcards = ContentManager.extractFlashcards[extractId];
+      
+      // Check if we have valid data
+      if (!Array.isArray(flashcards)) {
+        return; // No flashcards for this extract or invalid data
+      }
+      
+      flashcards.forEach(cardId => {
         const card = document.getElementById(cardId);
         if (!card) return; // Skip if card doesn't exist
         
-        const cardQuestion = card.querySelector('.flashcard-question').textContent;
+        const cardQuestion = card.querySelector('.flashcard-question')?.textContent || 'Untitled Flashcard';
         const shortQuestion = this.truncateText(cardQuestion, 40);
         
         // Create flashcard item
@@ -213,8 +214,7 @@ const LLMService = {
         
         container.appendChild(cardElement);
       });
-    }
-  },
+    },
     
     /**
      * Navigate to a specific content item by ID
@@ -528,6 +528,37 @@ const LLMService = {
     },
     
     /**
+     * Highlight text in the source element
+     * @param {HTMLElement} sourceElement - The source element
+     * @param {string} text - Text to highlight
+     */
+    highlightSourceText(sourceElement, text) {
+      if (!sourceElement || !text) return;
+      
+      // Find paragraph that contains the text
+      const paragraphs = sourceElement.querySelectorAll('p, h2');
+      
+      paragraphs.forEach(p => {
+        // Clean text for comparison - remove extra spaces
+        const cleanText = text.replace(/\s+/g, ' ').trim();
+        const pText = p.textContent.replace(/\s+/g, ' ').trim();
+        
+        // Check if paragraph contains the text
+        if (pText.includes(cleanText)) {
+          // Escape special characters for use in regex
+          const escapedText = cleanText.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+          
+          // Replace text with highlighted version
+          const originalHTML = p.innerHTML;
+          p.innerHTML = originalHTML.replace(
+            new RegExp(`(${escapedText})`, 'g'),
+            '<span class="highlighted-source">$1</span>'
+          );
+        }
+      });
+    },
+    
+    /**
      * Create a new extract from selected text
      * @param {string} text - The selected text
      * @param {string} sourceId - ID of the parent element
@@ -547,17 +578,25 @@ const LLMService = {
       try {
         // Get source element and parent info
         const sourceElement = document.getElementById(sourceId);
+        if (!sourceElement) {
+          throw new Error(`Source element with ID ${sourceId} not found`);
+        }
+        
         let parentTitle = '';
         let topicType = '';
         
         if (sourceId.startsWith('topic')) {
           // If parent is a topic
-          parentTitle = sourceElement.querySelector('h2').textContent;
-          topicType = sourceElement.getAttribute('data-topic');
+          const titleElement = sourceElement.querySelector('h2');
+          if (!titleElement) throw new Error('Title element not found in topic');
+          parentTitle = titleElement.textContent;
+          topicType = sourceElement.getAttribute('data-topic') || '';
         } else {
           // If parent is another extract
-          parentTitle = sourceElement.querySelector('.parent-title').textContent;
-          topicType = sourceElement.getAttribute('data-topic');
+          const titleElement = sourceElement.querySelector('.parent-title');
+          if (!titleElement) throw new Error('Parent title element not found in extract');
+          parentTitle = titleElement.textContent;
+          topicType = sourceElement.getAttribute('data-topic') || '';
         }
         
         // Calculate nesting level for styling
@@ -573,7 +612,10 @@ const LLMService = {
         
         // Clone the extract template
         const template = document.getElementById('extractTemplate');
+        if (!template) throw new Error('Extract template not found');
+        
         const extractElement = template.content.cloneNode(true).querySelector('.extract');
+        if (!extractElement) throw new Error('Extract element not found in template');
         
         // Set attributes
         extractElement.id = extractId;
@@ -582,14 +624,24 @@ const LLMService = {
         extractElement.setAttribute('data-level', nestingLevel);
         
         // Set content
-        extractElement.querySelector('.parent-title').textContent = parentTitle;
-        extractElement.querySelector('p').textContent = text;
+        const parentTitleElement = extractElement.querySelector('.parent-title');
+        if (!parentTitleElement) throw new Error('Parent title element not found in new extract');
+        parentTitleElement.textContent = parentTitle;
+        
+        const contentElement = extractElement.querySelector('p');
+        if (!contentElement) throw new Error('Content element not found in new extract');
+        contentElement.textContent = text;
         
         // Set extract button data-source
-        extractElement.querySelector('.extract-button').setAttribute('data-source', extractId);
+        const extractButton = extractElement.querySelector('.extract-button');
+        if (!extractButton) throw new Error('Extract button not found in new extract');
+        extractButton.setAttribute('data-source', extractId);
         
         // Append new extract to container
         document.getElementById('contentContainer').appendChild(extractElement);
+        
+        // Highlight the source text
+        this.highlightSourceText(sourceElement, text);
         
         // Update data structures
         this.extracts = document.querySelectorAll('.extract');
@@ -610,8 +662,10 @@ const LLMService = {
         // Initialize flashcard mapping
         this.extractFlashcards[extractId] = [];
         
-        // Generate flashcards automatically
-        await FlashcardManager.generateFlashcardsFromExtract(extractId, text, parentTitle, parentTitle);
+        // Generate flashcards automatically, but don't wait for it
+        // This prevents the extract creation from failing if the LLM fails
+        FlashcardManager.generateFlashcardsFromExtract(extractId, text, parentTitle, parentTitle)
+          .catch(err => console.error("Error generating flashcards, but extract was created:", err));
         
         // Rebuild content sequence to include new extract and flashcards
         this.buildContentSequence();
@@ -625,12 +679,17 @@ const LLMService = {
         
         // Update the content tree
         ContentTreeManager.renderContentTree();
+        
+        return extractId; // Return the ID of the created extract
       } catch (error) {
         console.error("Error creating extract:", error);
-        alert("There was an error creating the extract. Please try again.");
+        alert("There was an error creating the extract: " + error.message);
+        return null;
       } finally {
         // Remove loading indicator
-        document.getElementById('contentContainer').removeChild(loadingIndicator);
+        if (document.getElementById('contentContainer').contains(loadingIndicator)) {
+          document.getElementById('contentContainer').removeChild(loadingIndicator);
+        }
       }
     },
     
@@ -833,6 +892,7 @@ const LLMService = {
     init() {
       this.initializeCards();
       this.setupCardControlEvents();
+      this.setupManualFlashcardCreation(); // Add this line for manual flashcard creation
       this.updateReviewQueue();
     },
     
@@ -893,6 +953,138 @@ const LLMService = {
                           button.classList.contains('medium') ? 'medium' : 'hard';
         
         this.gradeCard(cardId, difficulty);
+      });
+    },
+    
+    /**
+     * Set up manual flashcard creation functionality
+     */
+    setupManualFlashcardCreation() {
+      // Add manual creation buttons to all extracts
+      document.querySelectorAll('.extract').forEach(extract => {
+        const extractId = extract.id;
+        const controlsDiv = extract.querySelector('.extract-controls');
+        
+        if (!controlsDiv) return;
+        
+        // Check if button already exists
+        if (!controlsDiv.querySelector('.manual-flashcard-button')) {
+          const manualButton = document.createElement('button');
+          manualButton.className = 'manual-flashcard-button';
+          manualButton.innerHTML = '<i class="fas fa-plus"></i> Create Flashcard';
+          manualButton.setAttribute('data-extract', extractId);
+          
+          controlsDiv.appendChild(manualButton);
+        }
+      });
+      
+      // Add event listener for dynamic extracts
+      const observer = new MutationObserver((mutations) => {
+        mutations.forEach((mutation) => {
+          if (mutation.type === 'childList' && mutation.addedNodes.length > 0) {
+            mutation.addedNodes.forEach((node) => {
+              if (node.classList && node.classList.contains('extract')) {
+                const extractId = node.id;
+                const controlsDiv = node.querySelector('.extract-controls');
+                
+                if (!controlsDiv) return;
+                
+                // Add manual flashcard button if it doesn't exist
+                if (!controlsDiv.querySelector('.manual-flashcard-button')) {
+                  const manualButton = document.createElement('button');
+                  manualButton.className = 'manual-flashcard-button';
+                  manualButton.innerHTML = '<i class="fas fa-plus"></i> Create Flashcard';
+                  manualButton.setAttribute('data-extract', extractId);
+                  
+                  controlsDiv.appendChild(manualButton);
+                }
+              }
+            });
+          }
+        });
+      });
+      
+      // Start observing the content container
+      observer.observe(document.getElementById('contentContainer'), { childList: true, subtree: true });
+      
+      // Add event listener for manual flashcard creation
+      document.addEventListener('click', (e) => {
+        const manualButton = e.target.closest('.manual-flashcard-button');
+        if (!manualButton) return;
+        
+        const extractId = manualButton.getAttribute('data-extract');
+        this.showFlashcardCreationForm(extractId);
+      });
+    },
+    
+    /**
+     * Show flashcard creation form
+     * @param {string} extractId - ID of the parent extract
+     */
+    showFlashcardCreationForm(extractId) {
+      // Get extract info for reference
+      const extract = document.getElementById(extractId);
+      if (!extract) return;
+      
+      const extractText = extract.querySelector('p')?.textContent || '';
+      
+      // Create modal for flashcard creation
+      const modal = document.createElement('div');
+      modal.className = 'flashcard-creation-modal';
+      modal.innerHTML = `
+        <div class="flashcard-creation-content">
+          <h3>Create Flashcard</h3>
+          <p>Create a flashcard following Piotr Wozniak's principles:</p>
+          <ul class="creation-tips">
+            <li>Focus on one specific fact per card</li>
+            <li>Create cloze deletions (fill-in-the-blank)</li>
+            <li>Use imagery where possible</li>
+            <li>Keep answers concise (1-7 words)</li>
+          </ul>
+          <div class="form-group">
+            <label>Question:</label>
+            <textarea id="flashcard-question" rows="3" placeholder="Enter your question..."></textarea>
+          </div>
+          <div class="form-group">
+            <label>Answer:</label>
+            <textarea id="flashcard-answer" rows="3" placeholder="Enter the answer..."></textarea>
+          </div>
+          <div class="extracted-content">
+            <h4>Extract Text (for reference):</h4>
+            <div class="reference-text">${extractText}</div>
+          </div>
+          <div class="button-group">
+            <button id="save-flashcard" class="flashcard-button">Save Flashcard</button>
+            <button id="cancel-flashcard" class="flashcard-button">Cancel</button>
+          </div>
+        </div>
+      `;
+      
+      document.body.appendChild(modal);
+      
+      // Add event listeners for the buttons
+      document.getElementById('save-flashcard').addEventListener('click', () => {
+        const question = document.getElementById('flashcard-question').value.trim();
+        const answer = document.getElementById('flashcard-answer').value.trim();
+        
+        if (question && answer) {
+          // Create the flashcard
+          const flashcardData = [{ question, answer }];
+          this.createFlashcardElements(flashcardData, extractId);
+          
+          // Close the modal
+          document.body.removeChild(modal);
+          
+          // Update content sequence
+          ContentManager.buildContentSequence();
+          ContentTreeManager.renderContentTree();
+        } else {
+          alert('Please enter both a question and an answer for your flashcard.');
+        }
+      });
+      
+      document.getElementById('cancel-flashcard').addEventListener('click', () => {
+        document.body.removeChild(modal);
       });
     },
     
@@ -1046,29 +1238,32 @@ const LLMService = {
      * @param {string} topicTitle - The parent topic title
      */
     async generateFlashcardsFromExtract(extractId, extractText, extractTitle, topicTitle) {
-      // Create improved prompt for the LLM with better instructions
+      // Create improved prompt for the LLM with Wozniak principles
       const flashcardPrompt = `
-        You are an educational flashcard creator specializing in effective learning through active recall. 
+        You are creating flashcards following the 20 rules of formulation by Piotr Wozniak.
         Create 2-3 high-quality flashcards based on this extract about ${topicTitle}, titled "${extractTitle}":
         
         "${extractText}"
         
         Your output must be a valid JSON array of objects with 'question' and 'answer' properties.
         
-        ESSENTIAL RULES for effective flashcards:
-        1. NEVER ask generic questions like "What is the main topic?" or about the extract's title
-        2. Each flashcard must test a SPECIFIC fact, concept, or relationship from the extract text
-        3. Questions must require understanding of the material, not just recognition
-        4. Focus on the most important, challenging concepts that require memorization
-        5. Questions should be precise and unambiguous
-        6. Answers should be concise (1-7 words) but complete
-        7. At least one card should test application of knowledge, not just facts
-        8. All questions must be answerable ONLY from information in the extract
+        FOLLOW THESE WOZNIAK PRINCIPLES:
+        1. Apply the minimum information principle - one fact per card
+        2. Use cloze deletions for facts/items in context
+        3. Ensure semantic organization of knowledge
+        4. Be concise - formulate short questions and answers
+        5. Use imagery - where relevant, ask for visually memorable items
+        6. Use mnemonic techniques where appropriate
+        7. Use computational building blocks - divide complex material
+        8. NEVER use "What is" or "Define" formats of questions
+        9. Avoid enumerations (asking to list multiple items)
+        10. Combat interference by making items distinct
         
-        Example high-quality flashcards:
+        Example flashcards following these principles:
         [
-          {"question": "What specific mechanism allows water to move up plant stems against gravity?", "answer": "Capillary action"},
-          {"question": "What distinguishes a compiler from an interpreter in programming?", "answer": "Translates entire program before execution"}
+          {"question": "The [?] property of light allows it to bend around obstacles", "answer": "wave"},
+          {"question": "Light demonstrates _____ duality in quantum physics", "answer": "wave-particle"},
+          {"question": "In cellular respiration, what molecule is the primary energy carrier?", "answer": "ATP"}
         ]
         
         RESPOND ONLY with the JSON array of flashcards, no explanations or other text.
@@ -1130,7 +1325,7 @@ const LLMService = {
             
             const keyTerm = words[keyTermIndex] || words[0];
             flashcards = [{
-              question: `Define "${keyTerm}" as mentioned in the extract about ${topicTitle}`,
+              question: `What is the function of ${keyTerm} in ${topicTitle}?`,
               answer: firstSentence.includes(':') ? 
                       firstSentence.split(':')[1].trim() : 
                       sentences[Math.min(1, sentences.length - 1)].trim()
@@ -1140,16 +1335,14 @@ const LLMService = {
             if (sentences.length > 1) {
               const secondSentence = sentences[1].trim();
               flashcards.push({
-                question: `What is the relationship between ${keyTerm} and ${topicTitle}?`,
-                answer: secondSentence.length < 50 ? 
-                       secondSentence : 
-                       secondSentence.substring(0, 47) + "..."
+                question: `In ${topicTitle}, ${keyTerm} is related to [?]`,
+                answer: secondSentence.split(' ').slice(0, 3).join(' ')
               });
             }
           } else {
             // Last resort fallback if we can't parse sentences
             flashcards = [{
-              question: `What is a key concept related to ${topicTitle} mentioned in this extract?`,
+              question: `In ${topicTitle}, what is a key concept?`,
               answer: extractTitle
             }];
           }
@@ -1213,6 +1406,422 @@ const LLMService = {
   };
   
   // ========================
+  // Cloze Deletion Module
+  // ========================
+  
+  const ClozeManager = {
+    init() {
+      this.setupClozeHandlers();
+    },
+    
+    setupClozeHandlers() {
+      // Add context menu for cloze deletion
+      document.addEventListener('contextmenu', (e) => {
+        const selection = window.getSelection();
+        const selectedText = selection.toString().trim();
+        
+        // Only activate for non-empty selections within content areas
+        if (selectedText && e.target.closest('.content-section, .extract')) {
+          e.preventDefault();
+          
+          // Create and show the context menu
+          this.showClozeMenu(e.clientX, e.clientY, selectedText, e.target);
+        }
+      });
+      
+      // Add button to toolbars
+      document.querySelectorAll('.extract-controls').forEach(control => {
+        const clozeButton = document.createElement('button');
+        clozeButton.className = 'cloze-button';
+        clozeButton.innerHTML = '<i class="fas fa-square"></i> Create Cloze';
+        clozeButton.addEventListener('click', () => {
+          const container = control.closest('.content-section, .extract');
+          const selection = window.getSelection();
+          const selectedText = selection.toString().trim();
+          
+          if (selectedText) {
+            this.createClozeFromSelection(selectedText, container);
+          } else {
+            alert('Please select text to create a cloze deletion');
+          }
+        });
+        control.appendChild(clozeButton);
+      });
+      
+      // Close context menu on click elsewhere
+      document.addEventListener('click', () => {
+        const menu = document.getElementById('clozeContextMenu');
+        if (menu) menu.remove();
+      });
+    },
+    
+    showClozeMenu(x, y, selectedText, targetElement) {
+      // Remove any existing context menu
+      const existingMenu = document.getElementById('clozeContextMenu');
+      if (existingMenu) existingMenu.remove();
+      
+      // Create context menu
+      const menu = document.createElement('div');
+      menu.id = 'clozeContextMenu';
+      menu.className = 'context-menu';
+      menu.innerHTML = `
+        <div class="menu-item" id="createCloze">Create Cloze Deletion</div>
+        <div class="menu-item" id="highlightText">Highlight Text</div>
+      `;
+      
+      // Position the menu
+      menu.style.left = `${x}px`;
+      menu.style.top = `${y}px`;
+      document.body.appendChild(menu);
+      
+      // Add event listeners
+      document.getElementById('createCloze').addEventListener('click', () => {
+        const container = targetElement.closest('.content-section, .extract');
+        this.createClozeFromSelection(selectedText, container);
+        menu.remove();
+      });
+      
+      document.getElementById('highlightText').addEventListener('click', () => {
+        this.highlightSelection(selectedText);
+        menu.remove();
+      });
+    },
+    
+    createClozeFromSelection(text, container) {
+        if (!text || !container) return;
+        
+        // Get container paragraph
+        const paragraph = container.querySelector('p');
+        if (!paragraph) return;
+        
+        // Get the current selection
+        const selection = window.getSelection();
+        if (!selection.rangeCount) return;
+        
+        const range = selection.getRangeAt(0);
+        const fragment = range.extractContents();
+        
+        // Create highlighted span instead of cloze deletion
+        const highlightSpan = document.createElement('span');
+        highlightSpan.className = 'highlighted-text';
+        highlightSpan.appendChild(fragment);
+        
+        // Insert back into the document
+        range.insertNode(highlightSpan);
+        selection.removeAllRanges();
+        
+        // Create a flashcard for this cloze
+        this.createClozeFlashcard(text, container.id);
+      },
+    
+    highlightSelection(text) {
+      // Find all text nodes containing the selection
+      const selection = window.getSelection();
+      if (!selection.rangeCount) return;
+      
+      const range = selection.getRangeAt(0);
+      const fragment = range.extractContents();
+      
+      // Create highlighted span
+      const highlightSpan = document.createElement('span');
+      highlightSpan.className = 'highlighted-text';
+      highlightSpan.appendChild(fragment);
+      
+      // Insert back into the document
+      range.insertNode(highlightSpan);
+      selection.removeAllRanges();
+    },
+    
+    createClozeFlashcard(clozeText, containerId) {
+      const flashcardId = `cloze-${Date.now()}`;
+      
+      // Create the question with the cloze deletion
+      const question = `Complete the sentence: "${clozeText.replace(/(.{3,})/g, '[...]')}"`;
+      const answer = clozeText;
+      
+      // Create flashcard
+      FlashcardManager.createFlashcardElements([
+        { question, answer }
+      ], containerId);
+    }
+  };
+  
+  // ========================
+  // Search Module
+  // ========================
+  
+  const SearchManager = {
+    init() {
+      this.createSearchInterface();
+      this.setupEventListeners();
+    },
+    
+    createSearchInterface() {
+      // Create search container
+      const searchContainer = document.createElement('div');
+      searchContainer.className = 'search-container';
+      searchContainer.innerHTML = `
+        <input type="text" id="searchInput" placeholder="Search topics, extracts, and flashcards...">
+        <button id="searchButton"><i class="fas fa-search"></i></button>
+        <div id="searchResults" class="search-results"></div>
+      `;
+      
+      // Insert search container after the header
+      const header = document.querySelector('header');
+      header.parentNode.insertBefore(searchContainer, header.nextSibling);
+      
+      // Add search styles to document
+      const style = document.createElement('style');
+      style.textContent = `
+        .search-container {
+          margin-bottom: 1.5rem;
+          position: relative;
+        }
+        
+        #searchInput {
+          width: 100%;
+          padding: 10px 40px 10px 10px;
+          border: 1px solid #ddd;
+          border-radius: 4px;
+          font-size: 1rem;
+        }
+        
+        #searchButton {
+          position: absolute;
+          right: 5px;
+          top: 5px;
+          background: none;
+          border: none;
+          font-size: 1.2rem;
+          color: var(--primary-color);
+          cursor: pointer;
+        }
+        
+        .search-results {
+          display: none;
+          position: absolute;
+          top: 100%;
+          left: 0;
+          right: 0;
+          background: white;
+          border: 1px solid #ddd;
+          border-radius: 0 0 4px 4px;
+          max-height: 300px;
+          overflow-y: auto;
+          z-index: 1000;
+          box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        
+        .search-result-item {
+          padding: 10px;
+          border-bottom: 1px solid #eee;
+          cursor: pointer;
+        }
+        
+        .search-result-item:hover {
+          background-color: var(--hover-color);
+        }
+        
+        .search-result-type {
+          font-size: 0.8rem;
+          color: #666;
+          margin-right: 5px;
+        }
+        
+        .search-highlight {
+          background-color: #fff9c4;
+          font-weight: bold;
+        }
+      `;
+      document.head.appendChild(style);
+    },
+    
+    setupEventListeners() {
+      const searchInput = document.getElementById('searchInput');
+      const searchButton = document.getElementById('searchButton');
+      const searchResults = document.getElementById('searchResults');
+      
+      // Search on button click
+      searchButton.addEventListener('click', () => {
+        this.performSearch(searchInput.value.trim());
+      });
+      
+      // Search on Enter key
+      searchInput.addEventListener('keyup', (e) => {
+        if (e.key === 'Enter') {
+          this.performSearch(searchInput.value.trim());
+        }
+        
+        // Hide results when input is cleared
+        if (searchInput.value.trim() === '') {
+          searchResults.style.display = 'none';
+        }
+      });
+      
+      // Hide search results when clicking outside
+      document.addEventListener('click', (e) => {
+        if (!searchInput.contains(e.target) && !searchButton.contains(e.target) && !searchResults.contains(e.target)) {
+          searchResults.style.display = 'none';
+        }
+      });
+    },
+    
+    performSearch(query) {
+      if (!query) return;
+      
+      const searchResults = document.getElementById('searchResults');
+      searchResults.innerHTML = '';
+      
+      if (query.length < 2) {
+        searchResults.innerHTML = '<div class="search-result-item">Type at least 2 characters to search</div>';
+        searchResults.style.display = 'block';
+        return;
+      }
+      
+      // Search in topics
+      const topicResults = this.searchInTopics(query);
+      
+      // Search in extracts
+      const extractResults = this.searchInExtracts(query);
+      
+      // Search in flashcards
+      const flashcardResults = this.searchInFlashcards(query);
+      
+      // Combine results
+      const allResults = [...topicResults, ...extractResults, ...flashcardResults];
+      
+      if (allResults.length === 0) {
+        searchResults.innerHTML = '<div class="search-result-item">No results found</div>';
+      } else {
+        // Sort results by relevance (exact matches first)
+        allResults.sort((a, b) => {
+          // Exact matches first
+          const aExact = a.text.toLowerCase() === query.toLowerCase();
+          const bExact = b.text.toLowerCase() === query.toLowerCase();
+          
+          if (aExact && !bExact) return -1;
+          if (!aExact && bExact) return 1;
+          
+          // Then by number of occurrences
+          return b.occurrences - a.occurrences;
+        });
+        
+        // Add results to the search results container
+        allResults.forEach(result => {
+          const resultItem = document.createElement('div');
+          resultItem.className = 'search-result-item';
+          
+          // Highlight the query in the result text
+          const highlightedText = this.highlightQuery(result.text, query);
+          
+          resultItem.innerHTML = `
+            <span class="search-result-type">${result.type}:</span>
+            ${highlightedText}
+          `;
+          
+          // Navigate to the item when clicked
+          resultItem.addEventListener('click', () => {
+            ContentTreeManager.navigateToItem(result.id);
+            searchResults.style.display = 'none';
+          });
+          
+          searchResults.appendChild(resultItem);
+        });
+      }
+      
+      searchResults.style.display = 'block';
+    },
+    
+    searchInTopics(query) {
+      const results = [];
+      const lowerQuery = query.toLowerCase();
+      
+      ContentManager.sections.forEach(section => {
+        const title = section.querySelector('h2')?.textContent || '';
+        const content = section.querySelector('p')?.textContent || '';
+        const fullText = `${title} ${content}`;
+        
+        if (fullText.toLowerCase().includes(lowerQuery)) {
+          // Count occurrences
+          const occurrences = (fullText.toLowerCase().match(new RegExp(lowerQuery, 'g')) || []).length;
+          
+          results.push({
+            id: section.id,
+            type: 'Topic',
+            text: title,
+            occurrences: occurrences
+          });
+        }
+      });
+      
+      return results;
+    },
+    
+    searchInExtracts(query) {
+      const results = [];
+      const lowerQuery = query.toLowerCase();
+      
+      ContentManager.extracts.forEach(extract => {
+        const content = extract.querySelector('p')?.textContent || '';
+        const sourceTitle = extract.querySelector('.parent-title')?.textContent || '';
+        
+        if (content.toLowerCase().includes(lowerQuery)) {
+          // Count occurrences
+          const occurrences = (content.toLowerCase().match(new RegExp(lowerQuery, 'g')) || []).length;
+          
+          // Get first sentence or truncate
+          const firstSentenceMatch = content.match(/^[^.!?]+[.!?]/);
+          let displayText = firstSentenceMatch ? 
+            firstSentenceMatch[0].trim() : 
+            (content.length > 60 ? content.substring(0, 60) + '...' : content);
+          
+          results.push({
+            id: extract.id,
+            type: 'Extract',
+            text: `${displayText} (from ${sourceTitle})`,
+            occurrences: occurrences
+          });
+        }
+      });
+      
+      return results;
+    },
+    
+    searchInFlashcards(query) {
+      const results = [];
+      const lowerQuery = query.toLowerCase();
+      
+      ContentManager.flashcards.forEach(card => {
+        const question = card.querySelector('.flashcard-question')?.textContent || '';
+        const answer = card.querySelector('.flashcard-answer')?.textContent || '';
+        const fullText = `${question} ${answer}`;
+        
+        if (fullText.toLowerCase().includes(lowerQuery)) {
+          // Count occurrences
+          const occurrences = (fullText.toLowerCase().match(new RegExp(lowerQuery, 'g')) || []).length;
+          
+          results.push({
+            id: card.id,
+            type: 'Flashcard',
+            text: question,
+            occurrences: occurrences
+          });
+        }
+      });
+      
+      return results;
+    },
+    
+    highlightQuery(text, query) {
+      // Create a regex for the query that ignores case
+      const regex = new RegExp(`(${query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`, 'gi');
+      
+      // Replace all occurrences with highlighted version
+      return text.replace(regex, '<span class="search-highlight">$1</span>');
+    }
+  };
+  
+  // ========================
   // App Initialization
   // ========================
   
@@ -1222,6 +1831,8 @@ const LLMService = {
     ContentManager.init();
     FlashcardManager.init();
     ContentTreeManager.init();
+    ClozeManager.init();
+    SearchManager.init();
     
     // Set up navigation buttons
     document.getElementById('nextButton').addEventListener('click', () => {

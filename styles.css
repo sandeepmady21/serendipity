@@ -608,3 +608,608 @@ p {
     background-color: #bbdefb;
     color: #000;
 }
+
+/* Add to styles.css to differentiate flashcards in the tree */
+.tree-flashcard {
+    margin-left: 15px;
+    position: relative;
+    font-size: 0.9rem;
+    background-color: #f1f8e9; /* Light green background */
+    border-left: 3px solid #558b2f; /* Green left border */
+    padding-left: 5px !important; /* Extra padding for the border */
+}
+
+.tree-flashcard::before {
+    content: "📝"; /* Flashcard icon */
+    position: absolute;
+    left: -15px;
+    color: #558b2f;
+}
+
+/* Make extracts more distinct */
+.tree-extract {
+    margin-left: 15px;
+    background-color: var(--extract-color); /* Use the extract color */
+    border-left: 3px solid var(--extract-border);
+    padding-left: 5px !important;
+}
+
+.tree-extract::before {
+    content: "✂️"; /* Scissors icon */
+    position: absolute;
+    left: -15px;
+    color: #ffb300;
+}
+
+/* Add to styles.css to differentiate content in the tree */
+
+/* Base styles for all tree items */
+.tree-item {
+    position: relative;
+    margin: 4px 0;
+    padding: 8px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+/* Flashcard styling */
+.tree-flashcard {
+    margin-left: 15px;
+    position: relative;
+    font-size: 0.9rem;
+    background-color: #f1f8e9; /* Light green background */
+    border-left: 3px solid #558b2f; /* Green left border */
+}
+
+.tree-flashcard::before {
+    content: "📝"; /* Flashcard icon */
+    position: absolute;
+    left: -15px;
+    color: #558b2f;
+}
+
+/* Extract styling - with clear hierarchy */
+.tree-extract {
+    margin-left: 15px;
+    background-color: var(--extract-color); /* Light orange */
+    border-left: 3px solid var(--extract-border);
+}
+
+.tree-extract::before {
+    content: "✂️"; /* Scissors icon */
+    position: absolute;
+    left: -15px;
+    color: #ffb300;
+}
+
+/* Nested extract - level 1 */
+.tree-nested-extract {
+    margin-left: 30px;
+    background-color: var(--nested-extract-color); /* Light blue */
+    border-left: 3px solid var(--nested-extract-border);
+}
+
+.tree-nested-extract::before {
+    content: "↳"; /* Arrow icon */
+    position: absolute;
+    left: -15px;
+    color: #4fc3f7;
+    font-weight: bold;
+}
+
+/* Deeply nested extract - level 2+ */
+.tree-deep-nested-extract {
+    margin-left: 45px;
+    background-color: var(--deep-nested-color); /* Light purple */
+    border-left: 3px solid var(--deep-nested-border);
+}
+
+.tree-deep-nested-extract::before {
+    content: "↳"; /* Arrow icon */
+    position: absolute;
+    left: -15px;
+    color: #ab47bc;
+    font-weight: bold;
+}
+
+/* Add connecting lines */
+.tree-extract:after,
+.tree-nested-extract:after,
+.tree-deep-nested-extract:after {
+    content: "";
+    position: absolute;
+    left: -20px;
+    top: 0;
+    width: 2px;
+    height: 100%;
+    background-color: #eee;
+    z-index: -1;
+}
+
+/* Hover effects */
+.tree-item:hover {
+    transform: translateX(2px);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+/* Active item */
+.tree-item.active {
+    box-shadow: 0 0 0 2px var(--primary-color);
+    font-weight: bold;
+}
+
+/* Manual flashcard creation button */
+.manual-flashcard-button {
+    background-color: #9c27b0; /* Purple to differentiate from other buttons */
+    color: white;
+    border: none;
+    padding: 0.4rem 0.8rem;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    transition: background-color 0.2s;
+  }
+  
+  .manual-flashcard-button:hover {
+    background-color: #7b1fa2;
+  }
+  
+  /* Modal for flashcard creation */
+  .flashcard-creation-modal {
+    display: flex;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.7);
+    z-index: 1000;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .flashcard-creation-content {
+    background-color: white;
+    padding: 2rem;
+    border-radius: 8px;
+    width: 90%;
+    max-width: 600px;
+    max-height: 90vh;
+    overflow-y: auto;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+  }
+  
+  .creation-tips {
+    margin: 1rem 0;
+    padding-left: 1.5rem;
+    font-size: 0.9rem;
+    color: #666;
+  }
+  
+  .form-group {
+    margin-bottom: 1rem;
+  }
+  
+  .form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: bold;
+  }
+  
+  .form-group textarea {
+    width: 100%;
+    padding: 0.5rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-family: inherit;
+    font-size: 1rem;
+  }
+  
+  .extracted-content {
+    margin: 1rem 0;
+    padding: 1rem;
+    background-color: #f5f5f5;
+    border-radius: 4px;
+    font-size: 0.9rem;
+  }
+  
+  .reference-text {
+    max-height: 120px;
+    overflow-y: auto;
+    padding: 0.5rem;
+    margin-top: 0.5rem;
+    background-color: white;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+  }
+  
+  .button-group {
+    display: flex;
+    justify-content: flex-end;
+    gap: 1rem;
+    margin-top: 1.5rem;
+  }
+  
+  #save-flashcard {
+    background-color: #4caf50;
+  }
+  
+  #cancel-flashcard {
+    background-color: #f44336;
+  }
+  
+  #save-flashcard:hover {
+    background-color: #3d8b40;
+  }
+  
+  #cancel-flashcard:hover {
+    background-color: #d32f2f;
+  }
+
+  /* Content Tree Improvements */
+.tree-item {
+    padding: 6px 8px;
+    margin: 3px 0;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    font-size: 0.85rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 100%;
+    position: relative;
+    border-left: 3px solid transparent;
+}
+
+.tree-topic {
+    font-weight: bold;
+    color: var(--primary-color);
+    border-left-color: var(--primary-color);
+    margin-top: 10px;
+}
+
+.tree-topic::before {
+    content: "P: ";
+    color: #888;
+    font-weight: normal;
+}
+
+.tree-extract {
+    margin-left: 15px;
+    position: relative;
+    border-left-color: var(--extract-border);
+}
+
+.tree-extract::before {
+    content: "C: ";
+    color: #888;
+}
+
+.tree-nested-extract {
+    margin-left: 25px;
+    position: relative;
+    border-left-color: var(--nested-extract-border);
+}
+
+.tree-nested-extract::before {
+    content: "C2: ";
+    color: #888;
+}
+
+.tree-deep-nested-extract {
+    margin-left: 35px;
+    position: relative;
+    border-left-color: var(--deep-nested-border);
+}
+
+.tree-deep-nested-extract::before {
+    content: "C3: ";
+    color: #888;
+}
+
+.tree-flashcard {
+    margin-left: 15px;
+    position: relative;
+    font-size: 0.8rem;
+    border-left-color: #4CAF50;
+}
+
+.tree-flashcard::before {
+    content: "Q: ";
+    color: #888;
+}
+
+/* Cloze Deletion and Highlighting Styles */
+.cloze-deletion {
+    background-color: #e2f0fd;
+    border-bottom: 2px dotted var(--primary-color);
+    padding: 0 4px;
+    border-radius: 3px;
+    cursor: pointer;
+    font-weight: bold;
+    color: var(--primary-color);
+}
+
+.cloze-deletion:hover::after {
+    content: attr(data-text);
+    position: absolute;
+    background-color: #333;
+    color: white;
+    padding: 3px 8px;
+    border-radius: 4px;
+    font-size: 0.9em;
+    margin-top: 20px;
+    z-index: 100;
+}
+
+.highlighted-text {
+    background-color: #fff9c4;
+    border-bottom: 2px solid #ffb300;
+  }
+
+.highlighted-source {
+    background-color: #ffe0b2;
+    border-radius: 2px;
+    padding: 0 2px;
+    border-bottom: 2px solid #ff9800;
+}
+
+/* Context Menu */
+.context-menu {
+    position: fixed;
+    background-color: white;
+    border-radius: 4px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+    z-index: 1000;
+    min-width: 180px;
+}
+
+.menu-item {
+    padding: 8px 12px;
+    cursor: pointer;
+}
+
+.menu-item:hover {
+    background-color: var(--hover-color);
+}
+
+/* Cloze button */
+.cloze-button {
+    background-color: #8e44ad;
+    color: white;
+    border: none;
+    padding: 0.4rem 0.8rem;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    transition: background-color 0.2s;
+}
+
+.cloze-button:hover {
+    background-color: #6c3483;
+}
+
+/* Cloze Deletion and Highlighting Styles */
+.cloze-deletion {
+    background-color: #e2f0fd;
+    border-bottom: 2px dotted var(--primary-color);
+    padding: 0 4px;
+    border-radius: 3px;
+    cursor: pointer;
+    font-weight: bold;
+    color: var(--primary-color);
+}
+
+.cloze-deletion:hover::after {
+    content: attr(data-text);
+    position: absolute;
+    background-color: #333;
+    color: white;
+    padding: 3px 8px;
+    border-radius: 4px;
+    font-size: 0.9em;
+    margin-top: 20px;
+    z-index: 100;
+}
+
+.highlighted-text {
+    background-color: #fff9c4;
+    border-radius: 2px;
+    padding: 0 2px;
+}
+
+.highlighted-source {
+    background-color: #ffe0b2;
+    border-radius: 2px;
+    padding: 0 2px;
+    border-bottom: 2px solid #ff9800;
+}
+
+/* Context Menu */
+.context-menu {
+    position: fixed;
+    background-color: white;
+    border-radius: 4px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+    z-index: 1000;
+    min-width: 180px;
+}
+
+.menu-item {
+    padding: 8px 12px;
+    cursor: pointer;
+}
+
+.menu-item:hover {
+    background-color: var(--hover-color);
+}
+
+/* Cloze button */
+.cloze-button {
+    background-color: #8e44ad;
+    color: white;
+    border: none;
+    padding: 0.4rem 0.8rem;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    transition: background-color 0.2s;
+}
+
+.cloze-button:hover {
+    background-color: #6c3483;
+}
+
+/* Content Tree Improvements */
+.tree-item {
+    padding: 6px 8px;
+    margin: 3px 0;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    font-size: 0.85rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 100%;
+    position: relative;
+    border-left: 3px solid transparent;
+}
+
+.tree-topic {
+    font-weight: bold;
+    color: var(--primary-color);
+    border-left-color: var(--primary-color);
+    margin-top: 10px;
+}
+
+.tree-topic::before {
+    content: "P: ";
+    color: #888;
+    font-weight: normal;
+}
+
+.tree-extract {
+    margin-left: 15px;
+    position: relative;
+    border-left-color: var(--extract-border);
+}
+
+.tree-extract::before {
+    content: "C: ";
+    color: #888;
+}
+
+.tree-nested-extract {
+    margin-left: 25px;
+    position: relative;
+    border-left-color: var(--nested-extract-border);
+}
+
+.tree-nested-extract::before {
+    content: "C2: ";
+    color: #888;
+}
+
+.tree-deep-nested-extract {
+    margin-left: 35px;
+    position: relative;
+    border-left-color: var(--deep-nested-border);
+}
+
+.tree-deep-nested-extract::before {
+    content: "C3: ";
+    color: #888;
+}
+
+.tree-flashcard {
+    margin-left: 15px;
+    position: relative;
+    font-size: 0.8rem;
+    border-left-color: #4CAF50;
+}
+
+.tree-flashcard::before {
+    content: "Q: ";
+    color: #888;
+}
+
+/* Manual flashcard creation form */
+.flashcard-creation-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.7);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.flashcard-creation-content {
+    background-color: white;
+    width: 90%;
+    max-width: 600px;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+.form-group textarea {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-family: inherit;
+}
+
+.creation-tips {
+    background-color: #f8f9fa;
+    padding: 10px;
+    border-radius: 4px;
+    margin-bottom: 15px;
+    font-size: 0.9rem;
+}
+
+.extracted-content {
+    background-color: #f5f5f5;
+    padding: 10px;
+    border-radius: 4px;
+    margin-top: 15px;
+    max-height: 150px;
+    overflow-y: auto;
+}
+
+.reference-text {
+    font-size: 0.9rem;
+    line-height: 1.4;
+}
+
+.button-group {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+}
