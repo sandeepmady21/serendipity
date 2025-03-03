@@ -1,1 +1,1 @@
-# seredipity-web
+# serendipity-web
