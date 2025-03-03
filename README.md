@@ -1,4 +1,4 @@
-# Serendipity-web: A simple supermemo demo
+# Serendipity-web: Absolute spagheti supermemo demo
 
 ### How to run:
     1. Make sure you have ollama installed and running
