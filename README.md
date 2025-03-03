@@ -17,10 +17,15 @@
 
 ### TODOs: 
     - [ ] Host the app @Michael
-    - [ ] Add new topics!! --> copy, paste text
+    - [ ] Add Markdown functionality
+    - [ ] Add new topics manually (needs better content for demo)
+    - [ ] Add images
+        - [ ] Also think about extracts and flashcards when images are present
+    - [ ] Import feature --> copy, paste text
     - [ ] Import web pages to add new topics --> when a link is added, scrape the web page and add content to as new topic
-    - [ ] Need to fix (ollama) local LLM API integration in script.js --> doesn't generate intelligent flashcards.
-    - [ ] If ollama is slow or doesn't work properly, implement commercial API integration
+    - [ ] Flashcard generation using LLM
+        - [ ] Need to fix (ollama) local LLM API integration in script.js --> doesn't generate intelligent flashcards.
+        - [ ] If ollama is slow or doesn't work properly, implement commercial API integration
     - [ ] Remove previous button, the next button just goes through the learning queue
     - [ ] Show message that all cards are done at the end.
     - [ ] The progress bar is buggy
