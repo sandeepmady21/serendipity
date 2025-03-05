@@ -1,1215 +1,1289 @@
 :root {
-    --primary-color: #2a5298;
-    --secondary-color: #f0f4f8;
-    --accent-color: #ff6b6b;
-    --text-color: #333;
-    --light-text: #666;
-    --card-shadow: 0 4px 8px rgba(0,0,0,0.1);
-    --sidebar-width: 250px;
-    --sidebar-bg: #f3f7fa;
-    --hover-color: #e0e7f1;
-    --active-item: #cbd7e9;
-    --edit-color: #fbfbe3;
-    --extract-color: #fff8e1;
-    --extract-border: #ffb300;
-    --nested-extract-color: #e8f4f8;
-    --nested-extract-border: #4fc3f7;
-    --deep-nested-color: #f3e5f5;
-    --deep-nested-border: #ab47bc;
+  --primary-color: #2a5298;
+  --secondary-color: #f0f4f8;
+  --accent-color: #ff6b6b;
+  --text-color: #333;
+  --light-text: #666;
+  --card-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  --sidebar-width: 250px;
+  --sidebar-bg: #f3f7fa;
+  --hover-color: #e0e7f1;
+  --active-item: #cbd7e9;
+  --edit-color: #fbfbe3;
+  --extract-color: #fff8e1;
+  --extract-border: #ffb300;
+  --nested-extract-color: #e8f4f8;
+  --nested-extract-border: #4fc3f7;
+  --deep-nested-color: #f3e5f5;
+  --deep-nested-border: #ab47bc;
 }
 
 * {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
 }
 
 body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    line-height: 1.6;
-    color: var(--text-color);
-    background-color: #f9f9f9;
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 20px;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  line-height: 1.6;
+  color: var(--text-color);
+  background-color: #f9f9f9;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
 }
 
 header {
-    text-align: center;
-    margin-bottom: 2rem;
-    padding: 1rem;
-    border-bottom: 2px solid var(--primary-color);
+  text-align: center;
+  margin-bottom: 2rem;
+  padding: 1rem;
+  border-bottom: 2px solid var(--primary-color);
+}
+
+.search-container {
+  margin-bottom: 1.5rem;
+  position: relative;
+}
+
+#searchInput {
+  width: 100%;
+  padding: 10px 40px 10px 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 1rem;
+}
+
+#searchButton {
+  position: absolute;
+  right: 5px;
+  top: 5px;
+  background: none;
+  border: none;
+  font-size: 1.2rem;
+  color: var(--primary-color);
+  cursor: pointer;
+}
+
+.search-results {
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 0 0 4px 4px;
+  max-height: 300px;
+  overflow-y: auto;
+  z-index: 1000;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.search-result-item {
+  padding: 10px;
+  border-bottom: 1px solid #eee;
+  cursor: pointer;
+}
+
+.search-result-item:hover {
+  background-color: var(--hover-color);
+}
+
+.search-result-type {
+  font-size: 0.8rem;
+  color: #666;
+  margin-right: 5px;
+}
+
+.search-highlight {
+  background-color: #fff9c4;
+  font-weight: bold;
 }
 
 h1 {
-    color: var(--primary-color);
-    font-size: 2.4rem;
-    margin-bottom: 0.5rem;
+  color: var(--primary-color);
+  font-size: 2.4rem;
+  margin-bottom: 0.5rem;
 }
 
 h2 {
-    color: var(--primary-color);
-    margin: 1.5rem 0 1rem;
-    font-size: 1.8rem;
+  color: var(--primary-color);
+  margin: 1.5rem 0 1rem;
+  font-size: 1.8rem;
 }
 
 h3 {
-    font-size: 1.4rem;
-    margin: 1.2rem 0 0.8rem;
-    color: #444;
+  font-size: 1.4rem;
+  margin: 1.2rem 0 0.8rem;
+  color: #444;
 }
 
 p {
-    margin-bottom: 1.2rem;
-    font-size: 1.1rem;
-    min-height: 1.6em;
+  margin-bottom: 1.2rem;
+  font-size: 1.1rem;
+  min-height: 1.6em;
 }
 
 .tagline {
-    font-style: italic;
-    color: var(--light-text);
-    margin-bottom: 1rem;
+  font-style: italic;
+  color: var(--light-text);
+  margin-bottom: 1rem;
 }
 
 /* App Layout */
 .app-container {
-    display: flex;
-    gap: 20px;
-    margin-bottom: 20px;
+  display: flex;
+  gap: 20px;
+  margin-bottom: 20px;
 }
 
 .content-tree-container {
-    flex: 0 0 var(--sidebar-width);
-    background-color: var(--sidebar-bg);
-    border-radius: 8px;
-    padding: 15px;
-    box-shadow: var(--card-shadow);
-    height: calc(100vh - 220px);
-    position: sticky;
-    top: 20px;
-    overflow-y: auto;
+  flex: 0 0 var(--sidebar-width);
+  background-color: var(--sidebar-bg);
+  border-radius: 8px;
+  padding: 15px;
+  box-shadow: var(--card-shadow);
+  height: calc(100vh - 220px);
+  position: sticky;
+  top: 20px;
+  overflow-y: auto;
 }
 
 .main-content-area {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
 }
 
 /* Content Tree Styles */
 .content-tree {
-    margin-top: 10px;
+  margin-top: 10px;
 }
 
 .tree-item {
-    padding: 8px 10px;
-    margin: 4px 0;
-    border-radius: 4px;
-    cursor: pointer;
-    transition: background-color 0.2s;
-    font-size: 0.95rem;
+  padding: 8px 10px;
+  margin: 4px 0;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  font-size: 0.95rem;
 }
 
 .tree-item:hover {
-    background-color: var(--hover-color);
+  background-color: var(--hover-color);
 }
 
 .tree-item.active {
-    background-color: var(--active-item);
-    font-weight: bold;
+  background-color: var(--active-item);
+  font-weight: bold;
 }
 
 .tree-topic {
-    font-weight: bold;
-    color: var(--primary-color);
+  font-weight: bold;
+  color: var(--primary-color);
 }
 
-.tree-extract, .tree-nested-extract, .tree-deep-nested-extract {
-    position: relative;
+.tree-extract,
+.tree-nested-extract,
+.tree-deep-nested-extract {
+  position: relative;
 }
 
 .tree-extract {
-    margin-left: 15px;
+  margin-left: 15px;
 }
 
 .tree-nested-extract {
-    margin-left: 30px;
+  margin-left: 30px;
 }
 
 .tree-deep-nested-extract {
-    margin-left: 45px;
+  margin-left: 45px;
 }
 
 .tree-extract::before {
-    content: "└─";
-    position: absolute;
-    left: -15px;
-    color: #aaa;
+  content: "└─";
+  position: absolute;
+  left: -15px;
+  color: #aaa;
 }
 
 .tree-nested-extract::before {
-    content: "└─";
-    position: absolute;
-    left: -15px;
-    color: #aaa;
+  content: "└─";
+  position: absolute;
+  left: -15px;
+  color: #aaa;
 }
 
 .tree-deep-nested-extract::before {
-    content: "└─";
-    position: absolute;
-    left: -15px;
-    color: #aaa;
+  content: "└─";
+  position: absolute;
+  left: -15px;
+  color: #aaa;
 }
 
 .tree-flashcard {
-    margin-left: 15px;
-    position: relative;
-    font-size: 0.9rem;
+  margin-left: 15px;
+  position: relative;
+  font-size: 0.9rem;
 }
 
 .tree-flashcard::before {
-    content: "└─";
-    position: absolute;
-    left: -15px;
-    color: #aaa;
+  content: "└─";
+  position: absolute;
+  left: -15px;
+  color: #aaa;
 }
 
 .content-container {
-    position: relative;
-    min-height: 400px;
+  position: relative;
+  min-height: 400px;
 }
 
 .content-section {
-    background-color: white;
-    padding: 1.5rem;
-    margin-bottom: 2rem;
-    border-radius: 8px;
-    box-shadow: var(--card-shadow);
-    display: none;
-    position: relative;
+  background-color: white;
+  padding: 1.5rem;
+  margin-bottom: 2rem;
+  border-radius: 8px;
+  box-shadow: var(--card-shadow);
+  display: none;
+  position: relative;
 }
 
 .content-section.active {
-    display: block;
+  display: block;
 }
 
 .extract {
-    padding: 1.5rem;
-    margin-bottom: 2rem;
-    border-radius: 8px;
-    box-shadow: var(--card-shadow);
-    display: none;
-    position: relative;
+  padding: 1.5rem;
+  margin-bottom: 2rem;
+  border-radius: 8px;
+  box-shadow: var(--card-shadow);
+  display: none;
+  position: relative;
 }
 
 .extract.active {
-    display: block;
+  display: block;
 }
 
 /* Styling for different nesting levels */
-.extract[data-level="0"], .extract:not([data-level]) {
-    background-color: var(--extract-color);
-    border-left: 4px solid var(--extract-border);
+.extract[data-level="0"],
+.extract:not([data-level]) {
+  background-color: var(--extract-color);
+  border-left: 4px solid var(--extract-border);
 }
 
 .extract[data-level="1"] {
-    background-color: var(--nested-extract-color);
-    border-left: 4px solid var(--nested-extract-border);
+  background-color: var(--nested-extract-color);
+  border-left: 4px solid var(--nested-extract-border);
 }
 
-.extract[data-level="2"], .extract[data-level="3"] {
-    background-color: var(--deep-nested-color);
-    border-left: 4px solid var(--deep-nested-border);
+.extract[data-level="2"],
+.extract[data-level="3"] {
+  background-color: var(--deep-nested-color);
+  border-left: 4px solid var(--deep-nested-border);
 }
 
 .extract-label {
-    font-size: 0.8rem;
-    text-transform: uppercase;
-    font-weight: bold;
-    margin-bottom: 0.5rem;
-    letter-spacing: 1px;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+  letter-spacing: 1px;
 }
 
-.extract[data-level="0"] .extract-label, .extract:not([data-level]) .extract-label {
-    color: #bf8c00;
+.extract[data-level="0"] .extract-label,
+.extract:not([data-level]) .extract-label {
+  color: #bf8c00;
 }
 
 .extract[data-level="1"] .extract-label {
-    color: #0277bd;
+  color: #0277bd;
 }
 
-.extract[data-level="2"] .extract-label, .extract[data-level="3"] .extract-label {
-    color: #7b1fa2;
+.extract[data-level="2"] .extract-label,
+.extract[data-level="3"] .extract-label {
+  color: #7b1fa2;
 }
 
 .flashcard {
-    background-color: var(--secondary-color);
-    border-radius: 8px;
-    padding: 1.5rem;
-    margin: 1.5rem 0;
-    box-shadow: var(--card-shadow);
-    transition: all 0.3s ease;
-    display: none;
-    position: relative;
+  background-color: var(--secondary-color);
+  border-radius: 8px;
+  padding: 1.5rem;
+  margin: 1.5rem 0;
+  box-shadow: var(--card-shadow);
+  transition: all 0.3s ease;
+  display: none;
+  position: relative;
 }
 
 .flashcard.active {
-    display: block;
+  display: block;
 }
 
 .flashcard-question {
-    font-weight: bold;
-    color: var(--primary-color);
-    font-size: 1.2rem;
-    margin-bottom: 1rem;
-    cursor: pointer;
-    min-height: 1.5em;
+  font-weight: bold;
+  color: var(--primary-color);
+  font-size: 1.2rem;
+  margin-bottom: 1rem;
+  cursor: pointer;
+  min-height: 1.5em;
 }
 
 .flashcard-answer {
-    display: none;
-    padding-top: 1rem;
-    border-top: 1px solid #ddd;
-    min-height: 1.5em;
+  display: none;
+  padding-top: 1rem;
+  border-top: 1px solid #ddd;
+  min-height: 1.5em;
 }
 
 .flashcard-controls {
-    display: none;
-    margin-top: 1rem;
-    text-align: center;
+  display: none;
+  margin-top: 1rem;
+  text-align: center;
 }
 
 .flashcard-button {
-    background-color: var(--primary-color);
-    color: white;
-    border: none;
-    padding: 0.5rem 1rem;
-    margin: 0 0.5rem;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 0.9rem;
-    transition: background-color 0.2s;
+  background-color: var(--primary-color);
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  margin: 0 0.5rem;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: background-color 0.2s;
 }
 
 .flashcard-button:hover {
-    background-color: #1a3c70;
+  background-color: #1a3c70;
 }
 
 .flashcard-button.easy {
-    background-color: #4caf50;
+  background-color: #4caf50;
 }
 
 .flashcard-button.medium {
-    background-color: #ff9800;
+  background-color: #ff9800;
 }
 
 .flashcard-button.hard {
-    background-color: #f44336;
+  background-color: #f44336;
 }
 
 .flashcard-button.easy:hover {
-    background-color: #3d8b40;
+  background-color: #3d8b40;
 }
 
 .flashcard-button.medium:hover {
-    background-color: #e68900;
+  background-color: #e68900;
 }
 
 .flashcard-button.hard:hover {
-    background-color: #d32f2f;
+  background-color: #d32f2f;
 }
 
 .navigation-controls {
-    text-align: center;
-    margin-top: 2rem;
+  text-align: center;
+  margin-top: 2rem;
 }
 
 .nav-button {
-    background-color: var(--primary-color);
-    color: white;
-    border: none;
-    padding: 0.7rem 1.5rem;
-    margin: 0 0.5rem;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 1rem;
-    transition: background-color 0.2s;
+  background-color: var(--primary-color);
+  color: white;
+  border: none;
+  padding: 0.7rem 1.5rem;
+  margin: 0 0.5rem;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: background-color 0.2s;
 }
 
 .nav-button:hover {
-    background-color: #1a3c70;
+  background-color: #1a3c70;
 }
 
 .nav-button:disabled {
-    background-color: #ccc;
-    cursor: not-allowed;
+  background-color: #ccc;
+  cursor: not-allowed;
 }
 
 .review-queue {
-    position: fixed;
-    bottom: 20px;
-    right: 20px;
-    background-color: var(--primary-color);
-    color: white;
-    padding: 1rem;
-    border-radius: 8px;
-    box-shadow: var(--card-shadow);
-    z-index: 100;
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background-color: var(--primary-color);
+  color: white;
+  padding: 1rem;
+  border-radius: 8px;
+  box-shadow: var(--card-shadow);
+  z-index: 100;
 }
 
 .review-count {
-    font-weight: bold;
-    font-size: 1.2rem;
+  font-weight: bold;
+  font-size: 1.2rem;
 }
 
 .review-button {
-    margin-top: 0.5rem;
-    background-color: white;
-    color: var(--primary-color);
-    border: none;
-    padding: 0.5rem 1rem;
-    border-radius: 4px;
-    cursor: pointer;
-    font-weight: bold;
+  margin-top: 0.5rem;
+  background-color: white;
+  color: var(--primary-color);
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: bold;
 }
 
 .topic-indicator {
-    display: inline-block;
-    padding: 0.3rem 0.6rem;
-    border-radius: 4px;
-    font-size: 0.8rem;
-    font-weight: bold;
-    margin-bottom: 0.5rem;
+  display: inline-block;
+  padding: 0.3rem 0.6rem;
+  border-radius: 4px;
+  font-size: 0.8rem;
+  font-weight: bold;
+  margin-bottom: 0.5rem;
 }
 
 .topic-physics {
-    background-color: #ffecb3;
-    color: #ff6f00;
+  background-color: #ffecb3;
+  color: #ff6f00;
 }
 
 .topic-networking {
-    background-color: #bbdefb;
-    color: #1565c0;
+  background-color: #bbdefb;
+  color: #1565c0;
 }
 
 .topic-biology {
-    background-color: #c8e6c9;
-    color: #2e7d32;
+  background-color: #c8e6c9;
+  color: #2e7d32;
 }
 
 .topic-math {
-    background-color: #e1bee7;
-    color: #6a1b9a;
+  background-color: #e1bee7;
+  color: #6a1b9a;
 }
 
 .topic-psychology {
-    background-color: #ffccbc;
-    color: #bf360c;
+  background-color: #ffccbc;
+  color: #bf360c;
 }
 
 .highlight {
-    background-color: #fff9c4;
-    padding: 0 2px;
+  background-color: #fff9c4;
+  padding: 0 2px;
 }
 
 .key-term {
-    font-weight: bold;
-    color: var(--primary-color);
+  font-weight: bold;
+  color: var(--primary-color);
 }
 
 .demo-info {
-    background-color: #e3f2fd;
-    padding: 1rem;
-    border-radius: 8px;
-    margin-bottom: 1.5rem;
-    border-left: 4px solid var(--primary-color);
+  background-color: #e3f2fd;
+  padding: 1rem;
+  border-radius: 8px;
+  margin-bottom: 1.5rem;
+  border-left: 4px solid var(--primary-color);
 }
 
 .review-modal {
-    display: none;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0,0,0,0.7);
-    z-index: 1000;
-    justify-content: center;
-    align-items: center;
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.7);
+  z-index: 1000;
+  justify-content: center;
+  align-items: center;
 }
 
 .review-modal-content {
-    background-color: white;
-    padding: 2rem;
-    border-radius: 8px;
-    width: 90%;
-    max-width: 600px;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+  background-color: white;
+  padding: 2rem;
+  border-radius: 8px;
+  width: 90%;
+  max-width: 600px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
 }
 
 .close-modal {
-    position: absolute;
-    top: 10px;
-    right: 20px;
-    font-size: 1.5rem;
-    color: white;
-    cursor: pointer;
+  position: absolute;
+  top: 10px;
+  right: 20px;
+  font-size: 1.5rem;
+  color: white;
+  cursor: pointer;
 }
 
 .progress-bar {
-    height: 8px;
-    background-color: #e0e0e0;
-    border-radius: 4px;
-    margin: 1rem 0;
-    overflow: hidden;
+  height: 8px;
+  background-color: #e0e0e0;
+  border-radius: 4px;
+  margin: 1rem 0;
+  overflow: hidden;
 }
 
 .progress-fill {
-    height: 100%;
-    background-color: var(--primary-color);
-    width: 0%;
-    transition: width 0.3s ease;
+  height: 100%;
+  background-color: var(--primary-color);
+  width: 0%;
+  transition: width 0.3s ease;
 }
 
 .content-type {
-    position: absolute;
-    top: -10px;
-    right: 10px;
-    padding: 2px 8px;
-    border-radius: 12px;
-    font-size: 0.7rem;
-    font-weight: bold;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
+  position: absolute;
+  top: -10px;
+  right: 10px;
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-size: 0.7rem;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
 .content-type.type-topic {
-    background-color: #e3f2fd;
-    color: var(--primary-color);
+  background-color: #e3f2fd;
+  color: var(--primary-color);
 }
 
 .content-type.type-extract {
-    background-color: #fff8e1;
-    color: #ff8f00;
+  background-color: #fff8e1;
+  color: #ff8f00;
 }
 
 .content-type.type-flashcard {
-    background-color: #f1f8e9;
-    color: #558b2f;
+  background-color: #f1f8e9;
+  color: #558b2f;
 }
 
 /* Inline editing styles */
 [contenteditable="true"] {
-    border: 1px solid transparent;
-    padding: 4px;
-    border-radius: 4px;
-    transition: all 0.2s;
-    min-height: 1.5em;
+  border: 1px solid transparent;
+  padding: 4px;
+  border-radius: 4px;
+  transition: all 0.2s;
+  min-height: 1.5em;
 }
 
 [contenteditable="true"]:hover {
-    border-color: #ddd;
-    background-color: #fafafa;
+  border-color: #ddd;
+  background-color: #fafafa;
 }
 
 [contenteditable="true"]:focus {
-    outline: none;
-    border-color: var(--primary-color);
-    background-color: var(--edit-color);
+  outline: none;
+  border-color: var(--primary-color);
+  background-color: var(--edit-color);
 }
 
 .content-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 0.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
 }
 
 .edit-controls {
-    display: flex;
-    gap: 5px;
+  display: flex;
+  gap: 5px;
 }
 
-.edit-button, .delete-button {
-    background: none;
-    border: none;
-    font-size: 0.9rem;
-    color: #666;
-    cursor: pointer;
-    padding: 5px;
-    border-radius: 4px;
-    transition: all 0.2s;
+.edit-button,
+.delete-button {
+  background: none;
+  border: none;
+  font-size: 0.9rem;
+  color: #666;
+  cursor: pointer;
+  padding: 5px;
+  border-radius: 4px;
+  transition: all 0.2s;
 }
 
 .edit-button:hover {
-    background-color: #e3f2fd;
-    color: var(--primary-color);
+  background-color: #e3f2fd;
+  color: var(--primary-color);
 }
 
 .delete-button:hover {
-    background-color: #ffebee;
-    color: #f44336;
+  background-color: #ffebee;
+  color: #f44336;
 }
 
 .extract-controls {
-    display: flex;
-    gap: 10px;
-    margin-top: 0.5rem;
-    flex-wrap: wrap;
+  display: flex;
+  gap: 10px;
+  margin-top: 0.5rem;
+  flex-wrap: wrap;
 }
 
-.extract-button, .flashcard-generator-button {
-    background-color: var(--primary-color);
-    color: white;
-    border: none;
-    padding: 0.4rem 0.8rem;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 0.9rem;
-    display: flex;
-    align-items: center;
-    gap: 5px;
-    transition: background-color 0.2s;
+.extract-button,
+.flashcard-generator-button {
+  background-color: var(--primary-color);
+  color: white;
+  border: none;
+  padding: 0.4rem 0.8rem;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  transition: background-color 0.2s;
 }
 
 .flashcard-generator-button {
-    background-color: #4caf50;
+  background-color: #4caf50;
 }
 
 .extract-button:hover {
-    background-color: #1a3c70;
+  background-color: #1a3c70;
 }
 
 .flashcard-generator-button:hover {
-    background-color: #3d8b40;
+  background-color: #3d8b40;
 }
 
 /* Loading indicator */
 .loading-indicator {
-    display: block;
-    margin: 10px 0;
-    font-style: italic;
-    color: #666;
+  display: block;
+  margin: 10px 0;
+  font-style: italic;
+  color: #666;
 }
-  
+
 .loading-indicator::after {
-    content: "...";
-    animation: ellipsis 1.5s infinite;
+  content: "...";
+  animation: ellipsis 1.5s infinite;
 }
-  
+
 @keyframes ellipsis {
-    0% { content: "."; }
-    33% { content: ".."; }
-    66% { content: "..."; }
+  0% {
+    content: ".";
+  }
+  33% {
+    content: "..";
+  }
+  66% {
+    content: "...";
+  }
 }
 
 /* Text selection styles */
 ::selection {
-    background-color: #bbdefb;
-    color: #000;
+  background-color: #bbdefb;
+  color: #000;
 }
 
 /* Add to styles.css to differentiate flashcards in the tree */
 .tree-flashcard {
-    margin-left: 15px;
-    position: relative;
-    font-size: 0.9rem;
-    background-color: #f1f8e9; /* Light green background */
-    border-left: 3px solid #558b2f; /* Green left border */
-    padding-left: 5px !important; /* Extra padding for the border */
+  margin-left: 15px;
+  position: relative;
+  font-size: 0.9rem;
+  background-color: #f1f8e9; /* Light green background */
+  border-left: 3px solid #558b2f; /* Green left border */
+  padding-left: 5px !important; /* Extra padding for the border */
 }
 
 .tree-flashcard::before {
-    content: "📝"; /* Flashcard icon */
-    position: absolute;
-    left: -15px;
-    color: #558b2f;
+  content: "📝"; /* Flashcard icon */
+  position: absolute;
+  left: -15px;
+  color: #558b2f;
 }
 
 /* Make extracts more distinct */
 .tree-extract {
-    margin-left: 15px;
-    background-color: var(--extract-color); /* Use the extract color */
-    border-left: 3px solid var(--extract-border);
-    padding-left: 5px !important;
+  margin-left: 15px;
+  background-color: var(--extract-color); /* Use the extract color */
+  border-left: 3px solid var(--extract-border);
+  padding-left: 5px !important;
 }
 
 .tree-extract::before {
-    content: "✂️"; /* Scissors icon */
-    position: absolute;
-    left: -15px;
-    color: #ffb300;
+  content: "✂️"; /* Scissors icon */
+  position: absolute;
+  left: -15px;
+  color: #ffb300;
 }
 
 /* Add to styles.css to differentiate content in the tree */
 
 /* Base styles for all tree items */
 .tree-item {
-    position: relative;
-    margin: 4px 0;
-    padding: 8px 10px;
-    border-radius: 4px;
-    cursor: pointer;
-    transition: all 0.2s ease;
+  position: relative;
+  margin: 4px 0;
+  padding: 8px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s ease;
 }
 
 /* Flashcard styling */
 .tree-flashcard {
-    margin-left: 15px;
-    position: relative;
-    font-size: 0.9rem;
-    background-color: #f1f8e9; /* Light green background */
-    border-left: 3px solid #558b2f; /* Green left border */
+  margin-left: 15px;
+  position: relative;
+  font-size: 0.9rem;
+  background-color: #f1f8e9; /* Light green background */
+  border-left: 3px solid #558b2f; /* Green left border */
 }
 
 .tree-flashcard::before {
-    content: "📝"; /* Flashcard icon */
-    position: absolute;
-    left: -15px;
-    color: #558b2f;
+  content: "📝"; /* Flashcard icon */
+  position: absolute;
+  left: -15px;
+  color: #558b2f;
 }
 
 /* Extract styling - with clear hierarchy */
 .tree-extract {
-    margin-left: 15px;
-    background-color: var(--extract-color); /* Light orange */
-    border-left: 3px solid var(--extract-border);
+  margin-left: 15px;
+  background-color: var(--extract-color); /* Light orange */
+  border-left: 3px solid var(--extract-border);
 }
 
 .tree-extract::before {
-    content: "✂️"; /* Scissors icon */
-    position: absolute;
-    left: -15px;
-    color: #ffb300;
+  content: "✂️"; /* Scissors icon */
+  position: absolute;
+  left: -15px;
+  color: #ffb300;
 }
 
 /* Nested extract - level 1 */
 .tree-nested-extract {
-    margin-left: 30px;
-    background-color: var(--nested-extract-color); /* Light blue */
-    border-left: 3px solid var(--nested-extract-border);
+  margin-left: 30px;
+  background-color: var(--nested-extract-color); /* Light blue */
+  border-left: 3px solid var(--nested-extract-border);
 }
 
 .tree-nested-extract::before {
-    content: "↳"; /* Arrow icon */
-    position: absolute;
-    left: -15px;
-    color: #4fc3f7;
-    font-weight: bold;
+  content: "↳"; /* Arrow icon */
+  position: absolute;
+  left: -15px;
+  color: #4fc3f7;
+  font-weight: bold;
 }
 
 /* Deeply nested extract - level 2+ */
 .tree-deep-nested-extract {
-    margin-left: 45px;
-    background-color: var(--deep-nested-color); /* Light purple */
-    border-left: 3px solid var(--deep-nested-border);
+  margin-left: 45px;
+  background-color: var(--deep-nested-color); /* Light purple */
+  border-left: 3px solid var(--deep-nested-border);
 }
 
 .tree-deep-nested-extract::before {
-    content: "↳"; /* Arrow icon */
-    position: absolute;
-    left: -15px;
-    color: #ab47bc;
-    font-weight: bold;
+  content: "↳"; /* Arrow icon */
+  position: absolute;
+  left: -15px;
+  color: #ab47bc;
+  font-weight: bold;
 }
 
 /* Add connecting lines */
 .tree-extract:after,
 .tree-nested-extract:after,
 .tree-deep-nested-extract:after {
-    content: "";
-    position: absolute;
-    left: -20px;
-    top: 0;
-    width: 2px;
-    height: 100%;
-    background-color: #eee;
-    z-index: -1;
+  content: "";
+  position: absolute;
+  left: -20px;
+  top: 0;
+  width: 2px;
+  height: 100%;
+  background-color: #eee;
+  z-index: -1;
 }
 
 /* Hover effects */
 .tree-item:hover {
-    transform: translateX(2px);
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  transform: translateX(2px);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 /* Active item */
 .tree-item.active {
-    box-shadow: 0 0 0 2px var(--primary-color);
-    font-weight: bold;
+  box-shadow: 0 0 0 2px var(--primary-color);
+  font-weight: bold;
 }
 
 /* Manual flashcard creation button */
 .manual-flashcard-button {
-    background-color: #9c27b0; /* Purple to differentiate from other buttons */
-    color: white;
-    border: none;
-    padding: 0.4rem 0.8rem;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 0.9rem;
-    display: flex;
-    align-items: center;
-    gap: 5px;
-    transition: background-color 0.2s;
-  }
-  
-  .manual-flashcard-button:hover {
-    background-color: #7b1fa2;
-  }
-  
-  /* Modal for flashcard creation */
-  .flashcard-creation-modal {
-    display: flex;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0,0,0,0.7);
-    z-index: 1000;
-    justify-content: center;
-    align-items: center;
-  }
-  
-  .flashcard-creation-content {
-    background-color: white;
-    padding: 2rem;
-    border-radius: 8px;
-    width: 90%;
-    max-width: 600px;
-    max-height: 90vh;
-    overflow-y: auto;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
-  }
-  
-  .creation-tips {
-    margin: 1rem 0;
-    padding-left: 1.5rem;
-    font-size: 0.9rem;
-    color: #666;
-  }
-  
-  .form-group {
-    margin-bottom: 1rem;
-  }
-  
-  .form-group label {
-    display: block;
-    margin-bottom: 0.5rem;
-    font-weight: bold;
-  }
-  
-  .form-group textarea {
-    width: 100%;
-    padding: 0.5rem;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    font-family: inherit;
-    font-size: 1rem;
-  }
-  
-  .extracted-content {
-    margin: 1rem 0;
-    padding: 1rem;
-    background-color: #f5f5f5;
-    border-radius: 4px;
-    font-size: 0.9rem;
-  }
-  
-  .reference-text {
-    max-height: 120px;
-    overflow-y: auto;
-    padding: 0.5rem;
-    margin-top: 0.5rem;
-    background-color: white;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-  }
-  
-  .button-group {
-    display: flex;
-    justify-content: flex-end;
-    gap: 1rem;
-    margin-top: 1.5rem;
-  }
-  
-  #save-flashcard {
-    background-color: #4caf50;
-  }
-  
-  #cancel-flashcard {
-    background-color: #f44336;
-  }
-  
-  #save-flashcard:hover {
-    background-color: #3d8b40;
-  }
-  
-  #cancel-flashcard:hover {
-    background-color: #d32f2f;
-  }
-
-  /* Content Tree Improvements */
-.tree-item {
-    padding: 6px 8px;
-    margin: 3px 0;
-    border-radius: 4px;
-    cursor: pointer;
-    transition: background-color 0.2s;
-    font-size: 0.85rem;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    max-width: 100%;
-    position: relative;
-    border-left: 3px solid transparent;
+  background-color: #9c27b0; /* Purple to differentiate from other buttons */
+  color: white;
+  border: none;
+  padding: 0.4rem 0.8rem;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  transition: background-color 0.2s;
 }
 
-.tree-topic {
-    font-weight: bold;
-    color: var(--primary-color);
-    border-left-color: var(--primary-color);
-    margin-top: 10px;
+.manual-flashcard-button:hover {
+  background-color: #7b1fa2;
 }
 
-.tree-topic::before {
-    content: "P: ";
-    color: #888;
-    font-weight: normal;
+/* Modal for flashcard creation */
+.flashcard-creation-modal {
+  display: flex;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.7);
+  z-index: 1000;
+  justify-content: center;
+  align-items: center;
 }
 
-.tree-extract {
-    margin-left: 15px;
-    position: relative;
-    border-left-color: var(--extract-border);
+.flashcard-creation-content {
+  background-color: white;
+  padding: 2rem;
+  border-radius: 8px;
+  width: 90%;
+  max-width: 600px;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
 }
 
-.tree-extract::before {
-    content: "C: ";
-    color: #888;
+.creation-tips {
+  margin: 1rem 0;
+  padding-left: 1.5rem;
+  font-size: 0.9rem;
+  color: #666;
 }
 
-.tree-nested-extract {
-    margin-left: 25px;
-    position: relative;
-    border-left-color: var(--nested-extract-border);
+.form-group {
+  margin-bottom: 1rem;
 }
 
-.tree-nested-extract::before {
-    content: "C2: ";
-    color: #888;
+.form-group label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: bold;
 }
 
-.tree-deep-nested-extract {
-    margin-left: 35px;
-    position: relative;
-    border-left-color: var(--deep-nested-border);
+.form-group textarea {
+  width: 100%;
+  padding: 0.5rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-family: inherit;
+  font-size: 1rem;
 }
 
-.tree-deep-nested-extract::before {
-    content: "C3: ";
-    color: #888;
+.extracted-content {
+  margin: 1rem 0;
+  padding: 1rem;
+  background-color: #f5f5f5;
+  border-radius: 4px;
+  font-size: 0.9rem;
 }
 
-.tree-flashcard {
-    margin-left: 15px;
-    position: relative;
-    font-size: 0.8rem;
-    border-left-color: #4CAF50;
+.reference-text {
+  max-height: 120px;
+  overflow-y: auto;
+  padding: 0.5rem;
+  margin-top: 0.5rem;
+  background-color: white;
+  border: 1px solid #ddd;
+  border-radius: 4px;
 }
 
-.tree-flashcard::before {
-    content: "Q: ";
-    color: #888;
+.button-group {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+  margin-top: 1.5rem;
 }
 
-/* Cloze Deletion and Highlighting Styles */
-.cloze-deletion {
-    background-color: #e2f0fd;
-    border-bottom: 2px dotted var(--primary-color);
-    padding: 0 4px;
-    border-radius: 3px;
-    cursor: pointer;
-    font-weight: bold;
-    color: var(--primary-color);
+#save-flashcard {
+  background-color: #4caf50;
 }
 
-.cloze-deletion:hover::after {
-    content: attr(data-text);
-    position: absolute;
-    background-color: #333;
-    color: white;
-    padding: 3px 8px;
-    border-radius: 4px;
-    font-size: 0.9em;
-    margin-top: 20px;
-    z-index: 100;
+#cancel-flashcard {
+  background-color: #f44336;
 }
 
-.highlighted-text {
-    background-color: #fff9c4;
-    border-bottom: 2px solid #ffb300;
-  }
-
-.highlighted-source {
-    background-color: #ffe0b2;
-    border-radius: 2px;
-    padding: 0 2px;
-    border-bottom: 2px solid #ff9800;
+#save-flashcard:hover {
+  background-color: #3d8b40;
 }
 
-/* Context Menu */
-.context-menu {
-    position: fixed;
-    background-color: white;
-    border-radius: 4px;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.2);
-    z-index: 1000;
-    min-width: 180px;
-}
-
-.menu-item {
-    padding: 8px 12px;
-    cursor: pointer;
-}
-
-.menu-item:hover {
-    background-color: var(--hover-color);
-}
-
-/* Cloze button */
-.cloze-button {
-    background-color: #8e44ad;
-    color: white;
-    border: none;
-    padding: 0.4rem 0.8rem;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 0.9rem;
-    display: flex;
-    align-items: center;
-    gap: 5px;
-    transition: background-color 0.2s;
-}
-
-.cloze-button:hover {
-    background-color: #6c3483;
-}
-
-/* Cloze Deletion and Highlighting Styles */
-.cloze-deletion {
-    background-color: #e2f0fd;
-    border-bottom: 2px dotted var(--primary-color);
-    padding: 0 4px;
-    border-radius: 3px;
-    cursor: pointer;
-    font-weight: bold;
-    color: var(--primary-color);
-}
-
-.cloze-deletion:hover::after {
-    content: attr(data-text);
-    position: absolute;
-    background-color: #333;
-    color: white;
-    padding: 3px 8px;
-    border-radius: 4px;
-    font-size: 0.9em;
-    margin-top: 20px;
-    z-index: 100;
-}
-
-.highlighted-text {
-    background-color: #fff9c4;
-    border-radius: 2px;
-    padding: 0 2px;
-}
-
-.highlighted-source {
-    background-color: #ffe0b2;
-    border-radius: 2px;
-    padding: 0 2px;
-    border-bottom: 2px solid #ff9800;
-}
-
-/* Context Menu */
-.context-menu {
-    position: fixed;
-    background-color: white;
-    border-radius: 4px;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.2);
-    z-index: 1000;
-    min-width: 180px;
-}
-
-.menu-item {
-    padding: 8px 12px;
-    cursor: pointer;
-}
-
-.menu-item:hover {
-    background-color: var(--hover-color);
-}
-
-/* Cloze button */
-.cloze-button {
-    background-color: #8e44ad;
-    color: white;
-    border: none;
-    padding: 0.4rem 0.8rem;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 0.9rem;
-    display: flex;
-    align-items: center;
-    gap: 5px;
-    transition: background-color 0.2s;
-}
-
-.cloze-button:hover {
-    background-color: #6c3483;
+#cancel-flashcard:hover {
+  background-color: #d32f2f;
 }
 
 /* Content Tree Improvements */
 .tree-item {
-    padding: 6px 8px;
-    margin: 3px 0;
-    border-radius: 4px;
-    cursor: pointer;
-    transition: background-color 0.2s;
-    font-size: 0.85rem;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    max-width: 100%;
-    position: relative;
-    border-left: 3px solid transparent;
+  padding: 6px 8px;
+  margin: 3px 0;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  font-size: 0.85rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+  position: relative;
+  border-left: 3px solid transparent;
 }
 
 .tree-topic {
-    font-weight: bold;
-    color: var(--primary-color);
-    border-left-color: var(--primary-color);
-    margin-top: 10px;
+  font-weight: bold;
+  color: var(--primary-color);
+  border-left-color: var(--primary-color);
+  margin-top: 10px;
 }
 
 .tree-topic::before {
-    content: "P: ";
-    color: #888;
-    font-weight: normal;
+  content: "P: ";
+  color: #888;
+  font-weight: normal;
 }
 
 .tree-extract {
-    margin-left: 15px;
-    position: relative;
-    border-left-color: var(--extract-border);
+  margin-left: 15px;
+  position: relative;
+  border-left-color: var(--extract-border);
 }
 
 .tree-extract::before {
-    content: "C: ";
-    color: #888;
+  content: "C: ";
+  color: #888;
 }
 
 .tree-nested-extract {
-    margin-left: 25px;
-    position: relative;
-    border-left-color: var(--nested-extract-border);
+  margin-left: 25px;
+  position: relative;
+  border-left-color: var(--nested-extract-border);
 }
 
 .tree-nested-extract::before {
-    content: "C2: ";
-    color: #888;
+  content: "C2: ";
+  color: #888;
 }
 
 .tree-deep-nested-extract {
-    margin-left: 35px;
-    position: relative;
-    border-left-color: var(--deep-nested-border);
+  margin-left: 35px;
+  position: relative;
+  border-left-color: var(--deep-nested-border);
 }
 
 .tree-deep-nested-extract::before {
-    content: "C3: ";
-    color: #888;
+  content: "C3: ";
+  color: #888;
 }
 
 .tree-flashcard {
-    margin-left: 15px;
-    position: relative;
-    font-size: 0.8rem;
-    border-left-color: #4CAF50;
+  margin-left: 15px;
+  position: relative;
+  font-size: 0.8rem;
+  border-left-color: #4caf50;
 }
 
 .tree-flashcard::before {
-    content: "Q: ";
-    color: #888;
+  content: "Q: ";
+  color: #888;
+}
+
+/* Cloze Deletion and Highlighting Styles */
+.cloze-deletion {
+  background-color: #e2f0fd;
+  border-bottom: 2px dotted var(--primary-color);
+  padding: 0 4px;
+  border-radius: 3px;
+  cursor: pointer;
+  font-weight: bold;
+  color: var(--primary-color);
+}
+
+.cloze-deletion:hover::after {
+  content: attr(data-text);
+  position: absolute;
+  background-color: #333;
+  color: white;
+  padding: 3px 8px;
+  border-radius: 4px;
+  font-size: 0.9em;
+  margin-top: 20px;
+  z-index: 100;
+}
+
+.highlighted-text {
+  background-color: #fff9c4;
+  border-bottom: 2px solid #ffb300;
+}
+
+.highlighted-source {
+  background-color: #ffe0b2;
+  border-radius: 2px;
+  padding: 0 2px;
+  border-bottom: 2px solid #ff9800;
+}
+
+/* Context Menu */
+.context-menu {
+  position: fixed;
+  background-color: white;
+  border-radius: 4px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+  z-index: 1000;
+  min-width: 180px;
+}
+
+.menu-item {
+  padding: 8px 12px;
+  cursor: pointer;
+}
+
+.menu-item:hover {
+  background-color: var(--hover-color);
+}
+
+/* Cloze button */
+.cloze-button {
+  background-color: #8e44ad;
+  color: white;
+  border: none;
+  padding: 0.4rem 0.8rem;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  transition: background-color 0.2s;
+}
+
+.cloze-button:hover {
+  background-color: #6c3483;
+}
+
+/* Cloze Deletion and Highlighting Styles */
+.cloze-deletion {
+  background-color: #e2f0fd;
+  border-bottom: 2px dotted var(--primary-color);
+  padding: 0 4px;
+  border-radius: 3px;
+  cursor: pointer;
+  font-weight: bold;
+  color: var(--primary-color);
+}
+
+.cloze-deletion:hover::after {
+  content: attr(data-text);
+  position: absolute;
+  background-color: #333;
+  color: white;
+  padding: 3px 8px;
+  border-radius: 4px;
+  font-size: 0.9em;
+  margin-top: 20px;
+  z-index: 100;
+}
+
+.highlighted-text {
+  background-color: #fff9c4;
+  border-radius: 2px;
+  padding: 0 2px;
+}
+
+.highlighted-source {
+  background-color: #ffe0b2;
+  border-radius: 2px;
+  padding: 0 2px;
+  border-bottom: 2px solid #ff9800;
+}
+
+/* Context Menu */
+.context-menu {
+  position: fixed;
+  background-color: white;
+  border-radius: 4px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+  z-index: 1000;
+  min-width: 180px;
+}
+
+.menu-item {
+  padding: 8px 12px;
+  cursor: pointer;
+}
+
+.menu-item:hover {
+  background-color: var(--hover-color);
+}
+
+/* Cloze button */
+.cloze-button {
+  background-color: #8e44ad;
+  color: white;
+  border: none;
+  padding: 0.4rem 0.8rem;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  transition: background-color 0.2s;
+}
+
+.cloze-button:hover {
+  background-color: #6c3483;
+}
+
+/* Content Tree Improvements */
+.tree-item {
+  padding: 6px 8px;
+  margin: 3px 0;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  font-size: 0.85rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+  position: relative;
+  border-left: 3px solid transparent;
+}
+
+.tree-topic {
+  font-weight: bold;
+  color: var(--primary-color);
+  border-left-color: var(--primary-color);
+  margin-top: 10px;
+}
+
+.tree-topic::before {
+  content: "P: ";
+  color: #888;
+  font-weight: normal;
+}
+
+.tree-extract {
+  margin-left: 15px;
+  position: relative;
+  border-left-color: var(--extract-border);
+}
+
+.tree-extract::before {
+  content: "C: ";
+  color: #888;
+}
+
+.tree-nested-extract {
+  margin-left: 25px;
+  position: relative;
+  border-left-color: var(--nested-extract-border);
+}
+
+.tree-nested-extract::before {
+  content: "C2: ";
+  color: #888;
+}
+
+.tree-deep-nested-extract {
+  margin-left: 35px;
+  position: relative;
+  border-left-color: var(--deep-nested-border);
+}
+
+.tree-deep-nested-extract::before {
+  content: "C3: ";
+  color: #888;
+}
+
+.tree-flashcard {
+  margin-left: 15px;
+  position: relative;
+  font-size: 0.8rem;
+  border-left-color: #4caf50;
+}
+
+.tree-flashcard::before {
+  content: "Q: ";
+  color: #888;
 }
 
 /* Manual flashcard creation form */
 .flashcard-creation-modal {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0,0,0,0.7);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 1000;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
 }
 
 .flashcard-creation-content {
-    background-color: white;
-    width: 90%;
-    max-width: 600px;
-    border-radius: 8px;
-    padding: 20px;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+  background-color: white;
+  width: 90%;
+  max-width: 600px;
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
 }
 
 .form-group {
-    margin-bottom: 15px;
+  margin-bottom: 15px;
 }
 
 .form-group label {
-    display: block;
-    margin-bottom: 5px;
-    font-weight: bold;
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
 }
 
 .form-group textarea {
-    width: 100%;
-    padding: 8px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    font-family: inherit;
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-family: inherit;
 }
 
 .creation-tips {
-    background-color: #f8f9fa;
-    padding: 10px;
-    border-radius: 4px;
-    margin-bottom: 15px;
-    font-size: 0.9rem;
+  background-color: #f8f9fa;
+  padding: 10px;
+  border-radius: 4px;
+  margin-bottom: 15px;
+  font-size: 0.9rem;
 }
 
 .extracted-content {
-    background-color: #f5f5f5;
-    padding: 10px;
-    border-radius: 4px;
-    margin-top: 15px;
-    max-height: 150px;
-    overflow-y: auto;
+  background-color: #f5f5f5;
+  padding: 10px;
+  border-radius: 4px;
+  margin-top: 15px;
+  max-height: 150px;
+  overflow-y: auto;
 }
 
 .reference-text {
-    font-size: 0.9rem;
-    line-height: 1.4;
+  font-size: 0.9rem;
+  line-height: 1.4;
 }
 
 .button-group {
-    display: flex;
-    justify-content: space-between;
-    margin-top: 20px;
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
 }

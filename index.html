@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,23 +8,30 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link rel="stylesheet" href="styles.css">
 </head>
+
 <body>
     <!-- Header Section -->
     <header>
         <h1>Serendipity Learn</h1>
         <p class="tagline">Discover knowledge across disciplines</p>
     </header>
-    
+
     <!-- Demo Information -->
     <div class="demo-info">
         <h3>Demo</h3>
         <p>
-            Explore topics from different fields. 
-            <strong>Highlight text and click "Create Extract" to save important parts.</strong> 
+            Explore topics from different fields.
+            <strong>Highlight text and click "Create Extract" to save important parts.</strong>
             You can create extracts from both topics and other extracts.
-            The system will automatically generate flashcards from your extracts. 
+            The system will automatically generate flashcards from your extracts.
             Review intervals: 3 min (easy), 1 min (medium), 30 sec (hard).
         </p>
+    </div>
+
+    <div class="search-container">
+        <input type="text" id="searchInput" placeholder="Search topics, extracts, and flashcards...">
+        <button id="searchButton"><i class="fas fa-search"></i></button>
+        <div id="searchResults" class="search-results"></div>
     </div>
 
     <!-- App Layout Container -->
@@ -55,12 +63,15 @@
                             <button class="edit-button"><i class="fas fa-edit"></i></button>
                         </div>
                     </div>
-                    <p contenteditable="true">The internet connects billions of devices worldwide using standardized protocols. When you browse a website, your data travels through multiple routers across networks and possibly oceans before reaching its destination.</p>
+                    <p contenteditable="true">The internet connects billions of devices worldwide using standardized
+                        protocols. When you browse a website, your data travels through multiple routers across networks
+                        and possibly oceans before reaching its destination.</p>
                     <div class="extract-controls">
-                        <button class="extract-button" data-source="topic1"><i class="fas fa-scissors"></i> Create Extract from Selection</button>
+                        <button class="extract-button" data-source="topic1"><i class="fas fa-scissors"></i> Create
+                            Extract from Selection</button>
                     </div>
                 </div>
-                
+
                 <div class="content-section" id="topic2" data-topic="biology">
                     <span class="content-type type-topic">Topic</span>
                     <span class="topic-indicator topic-biology">BIOLOGY</span>
@@ -70,12 +81,15 @@
                             <button class="edit-button"><i class="fas fa-edit"></i></button>
                         </div>
                     </div>
-                    <p contenteditable="true">Cells convert food into usable energy through cellular respiration. This process happens mainly in mitochondria, which transform glucose into ATP molecules that power cellular functions.</p>
+                    <p contenteditable="true">Cells convert food into usable energy through cellular respiration. This
+                        process happens mainly in mitochondria, which transform glucose into ATP molecules that power
+                        cellular functions.</p>
                     <div class="extract-controls">
-                        <button class="extract-button" data-source="topic2"><i class="fas fa-scissors"></i> Create Extract from Selection</button>
+                        <button class="extract-button" data-source="topic2"><i class="fas fa-scissors"></i> Create
+                            Extract from Selection</button>
                     </div>
                 </div>
-                
+
                 <div class="content-section" id="topic3" data-topic="physics">
                     <span class="content-type type-topic">Topic</span>
                     <span class="topic-indicator topic-physics">PHYSICS</span>
@@ -85,12 +99,15 @@
                             <button class="edit-button"><i class="fas fa-edit"></i></button>
                         </div>
                     </div>
-                    <p contenteditable="true">Light behaves both as a wave and as a particle (photon). This wave-particle duality is a core concept in quantum physics, demonstrating that our everyday experience doesn't always match reality at the smallest scales.</p>
+                    <p contenteditable="true">Light behaves both as a wave and as a particle (photon). This
+                        wave-particle duality is a core concept in quantum physics, demonstrating that our everyday
+                        experience doesn't always match reality at the smallest scales.</p>
                     <div class="extract-controls">
-                        <button class="extract-button" data-source="topic3"><i class="fas fa-scissors"></i> Create Extract from Selection</button>
+                        <button class="extract-button" data-source="topic3"><i class="fas fa-scissors"></i> Create
+                            Extract from Selection</button>
                     </div>
                 </div>
-                
+
                 <div class="content-section" id="topic4" data-topic="psychology">
                     <span class="content-type type-topic">Topic</span>
                     <span class="topic-indicator topic-psychology">PSYCHOLOGY</span>
@@ -100,12 +117,15 @@
                             <button class="edit-button"><i class="fas fa-edit"></i></button>
                         </div>
                     </div>
-                    <p contenteditable="true">Human memory isn't a perfect recording but a reconstructive process. Each time we recall something, our brain rebuilds the memory, potentially changing details based on new experiences and current context.</p>
+                    <p contenteditable="true">Human memory isn't a perfect recording but a reconstructive process. Each
+                        time we recall something, our brain rebuilds the memory, potentially changing details based on
+                        new experiences and current context.</p>
                     <div class="extract-controls">
-                        <button class="extract-button" data-source="topic4"><i class="fas fa-scissors"></i> Create Extract from Selection</button>
+                        <button class="extract-button" data-source="topic4"><i class="fas fa-scissors"></i> Create
+                            Extract from Selection</button>
                     </div>
                 </div>
-                
+
                 <div class="content-section" id="topic5" data-topic="math">
                     <span class="content-type type-topic">Topic</span>
                     <span class="topic-indicator topic-math">MATHEMATICS</span>
@@ -115,9 +135,12 @@
                             <button class="edit-button"><i class="fas fa-edit"></i></button>
                         </div>
                     </div>
-                    <p contenteditable="true">Graph theory studies relationships between objects. From social networks to transportation routes, graphs model countless real-world systems as points (nodes) connected by lines (edges).</p>
+                    <p contenteditable="true">Graph theory studies relationships between objects. From social networks
+                        to transportation routes, graphs model countless real-world systems as points (nodes) connected
+                        by lines (edges).</p>
                     <div class="extract-controls">
-                        <button class="extract-button" data-source="topic5"><i class="fas fa-scissors"></i> Create Extract from Selection</button>
+                        <button class="extract-button" data-source="topic5"><i class="fas fa-scissors"></i> Create
+                            Extract from Selection</button>
                     </div>
                 </div>
             </div>
@@ -143,7 +166,7 @@
             <!-- Review cards will be inserted here -->
         </div>
     </div>
-    
+
     <!-- Extract template - used for creating new extracts -->
     <template id="extractTemplate">
         <div class="extract" data-topic="" data-source="">
@@ -157,7 +180,8 @@
             </div>
             <p contenteditable="true"></p>
             <div class="extract-controls">
-                <button class="extract-button" data-source=""><i class="fas fa-scissors"></i> Create Extract from Selection</button>
+                <button class="extract-button" data-source=""><i class="fas fa-scissors"></i> Create Extract from
+                    Selection</button>
                 <button class="flashcard-generator-button"><i class="fas fa-brain"></i> Generate Flashcards</button>
             </div>
         </div>
@@ -182,8 +206,9 @@
             </div>
         </div>
     </template>
-    
+
     <!-- JavaScript -->
     <script src="script.js"></script>
 </body>
+
 </html>
