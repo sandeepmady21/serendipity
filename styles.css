@@ -42,22 +42,22 @@ header {
 }
 
 .search-container {
-  margin-bottom: 1.5rem;
+  margin-bottom: 2.5rem;
   position: relative;
 }
 
 #searchInput {
   width: 100%;
-  padding: 10px 40px 10px 10px;
+  padding: 10px 40px 10px 15px;
   border: 1px solid #ddd;
-  border-radius: 4px;
+  border-radius: 8px;
   font-size: 1rem;
 }
 
 #searchButton {
   position: absolute;
-  right: 5px;
-  top: 5px;
+  right: 12px;
+  top: 10px;
   background: none;
   border: none;
   font-size: 1.2rem;
@@ -242,6 +242,7 @@ p {
 }
 
 .content-section {
+  border: 1px solid #d3d3d3;
   background-color: white;
   padding: 1.5rem;
   margin-bottom: 2rem;
@@ -522,7 +523,7 @@ p {
   cursor: pointer;
 }
 
-.progress-bar {
+/* .progress-bar {
   height: 8px;
   background-color: #e0e0e0;
   border-radius: 4px;
@@ -535,7 +536,7 @@ p {
   background-color: var(--primary-color);
   width: 0%;
   transition: width 0.3s ease;
-}
+} */
 
 .content-type {
   position: absolute;

@@ -545,12 +545,19 @@ const ContentManager = {
       const flashcardButton = e.target.closest(".flashcard-generator-button");
       if (!flashcardButton) return;
 
-      const container = flashcardButton.closest(".extract");
+      const isExtract = !!flashcardButton.closest(".extract");
+      const container =
+        flashcardButton.closest(".extract") ||
+        flashcardButton.closest(".content-section");
       if (container) {
         const extractId = container.id;
         const extractText = container.querySelector("p").textContent;
-        const parentTitle =
-          container.querySelector(".parent-title").textContent;
+        const parentTitle = container.querySelector(
+          isExtract ? ".parent-title" : "h2"
+        ).textContent;
+
+        this.extractFlashcards[extractId] =
+          this.extractFlashcards[extractId] || [];
 
         // Generate flashcards for this extract
         FlashcardManager.generateFlashcardsFromExtract(
@@ -900,9 +907,9 @@ const ContentManager = {
     currentItem.element.classList.add("active");
 
     // Update progress bar
-    const progressPercent =
-      (this.currentItemIndex / (this.contentItems.length - 1)) * 100;
-    document.getElementById("progressFill").style.width = `${progressPercent}%`;
+    // const progressPercent =
+    //   (this.currentItemIndex / (this.contentItems.length - 1)) * 100;
+    // document.getElementById("progressFill").style.width = `${progressPercent}%`;
 
     // Update navigation buttons
     document.getElementById("prevButton").disabled =
@@ -1514,146 +1521,146 @@ const FlashcardManager = {
 // Cloze Deletion Module
 // ========================
 
-const ClozeManager = {
-  init() {
-    this.setupClozeHandlers();
-  },
+// const ClozeManager = {
+//   init() {
+//     this.setupClozeHandlers();
+//   },
 
-  setupClozeHandlers() {
-    // Add context menu for cloze deletion
-    document.addEventListener("contextmenu", (e) => {
-      const selection = window.getSelection();
-      const selectedText = selection.toString().trim();
+//   setupClozeHandlers() {
+//     // Add context menu for cloze deletion
+//     document.addEventListener("contextmenu", (e) => {
+//       const selection = window.getSelection();
+//       const selectedText = selection.toString().trim();
 
-      // Only activate for non-empty selections within content areas
-      if (selectedText && e.target.closest(".content-section, .extract")) {
-        e.preventDefault();
+//       // Only activate for non-empty selections within content areas
+//       if (selectedText && e.target.closest(".content-section, .extract")) {
+//         e.preventDefault();
 
-        // Create and show the context menu
-        this.showClozeMenu(e.clientX, e.clientY, selectedText, e.target);
-      }
-    });
+//         // Create and show the context menu
+//         this.showClozeMenu(e.clientX, e.clientY, selectedText, e.target);
+//       }
+//     });
 
-    // Add button to toolbars
-    document.querySelectorAll(".extract-controls").forEach((control) => {
-      const clozeButton = document.createElement("button");
-      clozeButton.className = "cloze-button";
-      clozeButton.innerHTML = '<i class="fas fa-square"></i> Create Cloze';
-      clozeButton.addEventListener("click", () => {
-        const container = control.closest(".content-section, .extract");
-        const selection = window.getSelection();
-        const selectedText = selection.toString().trim();
+//     // Add button to toolbars
+//     document.querySelectorAll(".extract-controls").forEach((control) => {
+//       const clozeButton = document.createElement("button");
+//       clozeButton.className = "cloze-button";
+//       clozeButton.innerHTML = '<i class="fas fa-square"></i> Create Cloze';
+//       clozeButton.addEventListener("click", () => {
+//         const container = control.closest(".content-section, .extract");
+//         const selection = window.getSelection();
+//         const selectedText = selection.toString().trim();
 
-        if (selectedText) {
-          this.createClozeFromSelection(selectedText, container);
-        } else {
-          alert("Please select text to create a cloze deletion");
-        }
-      });
-      control.appendChild(clozeButton);
-    });
+//         if (selectedText) {
+//           this.createClozeFromSelection(selectedText, container);
+//         } else {
+//           alert("Please select text to create a cloze deletion");
+//         }
+//       });
+//       control.appendChild(clozeButton);
+//     });
 
-    // Close context menu on click elsewhere
-    document.addEventListener("click", () => {
-      const menu = document.getElementById("clozeContextMenu");
-      if (menu) menu.remove();
-    });
-  },
+//     // Close context menu on click elsewhere
+//     document.addEventListener("click", () => {
+//       const menu = document.getElementById("clozeContextMenu");
+//       if (menu) menu.remove();
+//     });
+//   },
 
-  showClozeMenu(x, y, selectedText, targetElement) {
-    // Remove any existing context menu
-    const existingMenu = document.getElementById("clozeContextMenu");
-    if (existingMenu) existingMenu.remove();
+//   showClozeMenu(x, y, selectedText, targetElement) {
+//     // Remove any existing context menu
+//     const existingMenu = document.getElementById("clozeContextMenu");
+//     if (existingMenu) existingMenu.remove();
 
-    // Create context menu
-    const menu = document.createElement("div");
-    menu.id = "clozeContextMenu";
-    menu.className = "context-menu";
-    menu.innerHTML = `
-        <div class="menu-item" id="createCloze">Create Cloze Deletion</div>
-        <div class="menu-item" id="highlightText">Highlight Text</div>
-      `;
+//     // Create context menu
+//     const menu = document.createElement("div");
+//     menu.id = "clozeContextMenu";
+//     menu.className = "context-menu";
+//     menu.innerHTML = `
+//         <div class="menu-item" id="createCloze">Create Cloze Deletion</div>
+//         <div class="menu-item" id="highlightText">Highlight Text</div>
+//       `;
 
-    // Position the menu
-    menu.style.left = `${x}px`;
-    menu.style.top = `${y}px`;
-    document.body.appendChild(menu);
+//     // Position the menu
+//     menu.style.left = `${x}px`;
+//     menu.style.top = `${y}px`;
+//     document.body.appendChild(menu);
 
-    // Add event listeners
-    document.getElementById("createCloze").addEventListener("click", () => {
-      const container = targetElement.closest(".content-section, .extract");
-      this.createClozeFromSelection(selectedText, container);
-      menu.remove();
-    });
+//     // Add event listeners
+//     document.getElementById("createCloze").addEventListener("click", () => {
+//       const container = targetElement.closest(".content-section, .extract");
+//       this.createClozeFromSelection(selectedText, container);
+//       menu.remove();
+//     });
 
-    document.getElementById("highlightText").addEventListener("click", () => {
-      this.highlightSelection(selectedText);
-      menu.remove();
-    });
-  },
+//     document.getElementById("highlightText").addEventListener("click", () => {
+//       this.highlightSelection(selectedText);
+//       menu.remove();
+//     });
+//   },
 
-  createClozeFromSelection(text, container) {
-    if (!text || !container) return;
+//   createClozeFromSelection(text, container) {
+//     if (!text || !container) return;
 
-    // Get container paragraph
-    const paragraph = container.querySelector("p");
-    if (!paragraph) return;
+//     // Get container paragraph
+//     const paragraph = container.querySelector("p");
+//     if (!paragraph) return;
 
-    // Get the current selection
-    const selection = window.getSelection();
-    if (!selection.rangeCount) return;
+//     // Get the current selection
+//     const selection = window.getSelection();
+//     if (!selection.rangeCount) return;
 
-    const range = selection.getRangeAt(0);
-    const fragment = range.extractContents();
+//     const range = selection.getRangeAt(0);
+//     const fragment = range.extractContents();
 
-    // Create highlighted span instead of cloze deletion
-    const highlightSpan = document.createElement("span");
-    highlightSpan.className = "highlighted-text";
-    highlightSpan.appendChild(fragment);
+//     // Create highlighted span instead of cloze deletion
+//     const highlightSpan = document.createElement("span");
+//     highlightSpan.className = "highlighted-text";
+//     highlightSpan.appendChild(fragment);
 
-    // Insert back into the document
-    range.insertNode(highlightSpan);
-    selection.removeAllRanges();
+//     // Insert back into the document
+//     range.insertNode(highlightSpan);
+//     selection.removeAllRanges();
 
-    // Create a flashcard for this cloze
-    this.createClozeFlashcard(text, container.id);
-  },
+//     // Create a flashcard for this cloze
+//     this.createClozeFlashcard(text, container.id);
+//   },
 
-  highlightSelection(text) {
-    // Find all text nodes containing the selection
-    const selection = window.getSelection();
-    if (!selection.rangeCount) return;
+//   highlightSelection(text) {
+//     // Find all text nodes containing the selection
+//     const selection = window.getSelection();
+//     if (!selection.rangeCount) return;
 
-    const range = selection.getRangeAt(0);
-    const fragment = range.extractContents();
+//     const range = selection.getRangeAt(0);
+//     const fragment = range.extractContents();
 
-    // Create highlighted span
-    const highlightSpan = document.createElement("span");
-    highlightSpan.className = "highlighted-text";
-    highlightSpan.appendChild(fragment);
+//     // Create highlighted span
+//     const highlightSpan = document.createElement("span");
+//     highlightSpan.className = "highlighted-text";
+//     highlightSpan.appendChild(fragment);
 
-    // Insert back into the document
-    range.insertNode(highlightSpan);
-    selection.removeAllRanges();
-  },
+//     // Insert back into the document
+//     range.insertNode(highlightSpan);
+//     selection.removeAllRanges();
+//   },
 
-  createClozeFlashcard(clozeText, containerId) {
-    const flashcardId = `cloze-${Date.now()}`;
+//   createClozeFlashcard(clozeText, containerId) {
+//     const flashcardId = `cloze-${Date.now()}`;
 
-    // Create the question with the cloze deletion
-    const question = `Complete the sentence: "${clozeText.replace(
-      /(.{3,})/g,
-      "[...]"
-    )}"`;
-    const answer = clozeText;
+//     // Create the question with the cloze deletion
+//     const question = `Complete the sentence: "${clozeText.replace(
+//       /(.{3,})/g,
+//       "[...]"
+//     )}"`;
+//     const answer = clozeText;
 
-    // Create flashcard
-    FlashcardManager.createFlashcardElements(
-      [{ question, answer }],
-      containerId
-    );
-  },
-};
+//     // Create flashcard
+//     FlashcardManager.createFlashcardElements(
+//       [{ question, answer }],
+//       containerId
+//     );
+//   },
+// };
 
 // ========================
 // Search Module
@@ -1882,7 +1889,7 @@ document.addEventListener("DOMContentLoaded", () => {
   ContentManager.init();
   FlashcardManager.init();
   ContentTreeManager.init();
-  ClozeManager.init();
+  // ClozeManager.init();
   SearchManager.init();
 
   // Set up navigation buttons
