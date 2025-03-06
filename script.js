@@ -403,6 +403,7 @@ const ContentManager = {
       (e) => {
         const target = e.target;
         if (
+          target.hasAttribute &&
           target.hasAttribute("contenteditable") &&
           target.getAttribute("contenteditable") === "true"
         ) {
@@ -912,10 +913,10 @@ const ContentManager = {
     // document.getElementById("progressFill").style.width = `${progressPercent}%`;
 
     // Update navigation buttons
-    document.getElementById("prevButton").disabled =
-      this.currentItemIndex === 0;
-    document.getElementById("nextButton").disabled =
-      this.currentItemIndex === this.contentItems.length - 1;
+    // document.getElementById("prevButton").disabled =
+    // this.currentItemIndex === 0;
+    // document.getElementById("nextButton").disabled =
+    //   this.currentItemIndex === this.contentItems.length - 1;
 
     // Update content tree
     ContentTreeManager.updateActiveTreeItem(currentItem.id);
@@ -930,29 +931,42 @@ const ContentManager = {
     return this.contentItems[this.currentItemIndex];
   },
 
+  getRandomIntExcept(min, max, current) {
+    min = Math.ceil(min);
+    max = Math.floor(max);
+    const random = Math.floor(Math.random() * (max - min + 1)) + min;
+    if (random !== current) {
+      return random;
+    }
+    return Math.random() < 0.5
+      ? Math.max(0, random - 1)
+      : Math.min(random + 1, max - 1);
+  },
+
   /**
    * Navigate to the next content item
    */
   goToNext() {
-    if (this.currentItemIndex < this.contentItems.length - 1) {
-      this.currentItemIndex++;
-      this.showCurrentItem();
-      return true;
-    }
-    return false;
+    this.currentItemIndex = this.getRandomIntExcept(
+      0,
+      this.contentItems.length - 1,
+      this.currentItemIndex
+    );
+    this.showCurrentItem();
+    return true;
   },
 
-  /**
-   * Navigate to the previous content item
-   */
-  goToPrevious() {
-    if (this.currentItemIndex > 0) {
-      this.currentItemIndex--;
-      this.showCurrentItem();
-      return true;
-    }
-    return false;
-  },
+  // /**
+  //  * Navigate to the previous content item
+  //  */
+  // goToPrevious() {
+  //   if (this.currentItemIndex > 0) {
+  //     this.currentItemIndex--;
+  //     this.showCurrentItem();
+  //     return true;
+  //   }
+  //   return false;
+  // },
 };
 
 // ========================
@@ -1897,9 +1911,9 @@ document.addEventListener("DOMContentLoaded", () => {
     ContentManager.goToNext();
   });
 
-  document.getElementById("prevButton").addEventListener("click", () => {
-    ContentManager.goToPrevious();
-  });
+  // document.getElementById("prevButton").addEventListener("click", () => {
+  //   ContentManager.goToPrevious();
+  // });
 
   // Set up review button
   document.getElementById("reviewButton").addEventListener("click", () => {
