@@ -62,6 +62,17 @@ const ContentTreeManager = {
     this.renderContentTree();
   },
 
+  toggleTreeItem(e) {
+    const treeItem = e.target;
+    const topicId = treeItem.dataset.id;
+    const children = document.querySelectorAll(
+      `div.tree-item[data-parent="${topicId}"]`
+    );
+    children.forEach((child) => {
+      child.classList.toggle("tree-item-hidden");
+    });
+  },
+
   /**
    * Render the content tree based on current content items
    */
@@ -97,8 +108,9 @@ const ContentTreeManager = {
       }
 
       // Add topic click handler
-      topicElement.addEventListener("click", () => {
+      topicElement.addEventListener("click", (e) => {
         this.navigateToItem(topicId);
+        this.toggleTreeItem(e);
       });
 
       treeContainer.appendChild(topicElement);
@@ -151,6 +163,7 @@ const ContentTreeManager = {
       const extractElement = document.createElement("div");
       extractElement.className = treeItemClass;
       extractElement.setAttribute("data-id", extractId);
+      extractElement.setAttribute("data-parent", parentId);
       extractElement.setAttribute("data-level", level);
       extractElement.textContent = displayText;
       extractElement.title = extractText; // Show full text on hover
@@ -161,14 +174,15 @@ const ContentTreeManager = {
       }
 
       // Add extract click handler
-      extractElement.addEventListener("click", () => {
+      extractElement.addEventListener("click", (e) => {
         this.navigateToItem(extractId);
+        this.toggleTreeItem(e);
       });
 
       container.appendChild(extractElement);
 
       // Add flashcards for this extract
-      this.addFlashcardsToTree(container, extractId, currentItem);
+      this.addFlashcardsToTree(container, extractId, currentItem, parentId);
 
       // Recursively add child extracts
       this.addExtractsToTree(container, extractId, currentItem, level + 1);
@@ -181,7 +195,7 @@ const ContentTreeManager = {
    * @param {string} extractId - ID of the parent extract
    * @param {Object} currentItem - Currently active item (if any)
    */
-  addFlashcardsToTree(container, extractId, currentItem) {
+  addFlashcardsToTree(container, extractId, currentItem, parentId) {
     const flashcards = ContentManager.extractFlashcards[extractId];
 
     // Check if we have valid data
@@ -202,6 +216,7 @@ const ContentTreeManager = {
       const cardElement = document.createElement("div");
       cardElement.className = "tree-item tree-flashcard";
       cardElement.setAttribute("data-id", cardId);
+      cardElement.setAttribute("data-parent", parentId);
       cardElement.textContent = shortQuestion;
       cardElement.title = cardQuestion; // Full question on hover
 

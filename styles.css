@@ -242,7 +242,7 @@ p {
 }
 
 .content-section {
-  border: 1px solid #d3d3d3;
+  /* border: 1px solid #d3d3d3; */
   background-color: white;
   padding: 1.5rem;
   margin-bottom: 2rem;
@@ -941,6 +941,19 @@ p {
   border-left: 3px solid transparent;
 }
 
+.tree-item[data-parent] {
+  display: block;
+}
+
+.tree-item-hidden[data-parent] {
+  display: none;
+}
+
+.tree-item-hidden[data-parent] {
+  visibility: hidden;
+  opacity: 0;
+}
+
 .tree-topic {
   font-weight: bold;
   color: var(--primary-color);
@@ -948,11 +961,11 @@ p {
   margin-top: 10px;
 }
 
-.tree-topic::before {
+/* .tree-topic::before {
   content: "P: ";
   color: #888;
   font-weight: normal;
-}
+} */
 
 .tree-extract {
   margin-left: 15px;
@@ -1167,12 +1180,6 @@ p {
   color: var(--primary-color);
   border-left-color: var(--primary-color);
   margin-top: 10px;
-}
-
-.tree-topic::before {
-  content: "P: ";
-  color: #888;
-  font-weight: normal;
 }
 
 .tree-extract {
