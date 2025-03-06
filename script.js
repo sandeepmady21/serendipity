@@ -10,6 +10,73 @@
  * - Search functionality
  */
 
+const TOPICS = {
+  computerscience: {
+    heading: "Cryptography Fundamentals",
+    content:
+      "Cryptography enables secure digital communication through mathematical techniques that make data unreadable to unauthorized parties. Modern encryption uses public-key systems where different keys encrypt and decrypt information. The security of these systems often relies on mathematical problems like integer factorization that are computationally difficult to solve. As quantum computing advances, researchers are developing quantum-resistant algorithms to maintain digital privacy.",
+  },
+  philosophy: {
+    heading: "Thought Experiments",
+    content:
+      'Thought experiments allow philosophers to explore complex ideas using imaginary scenarios. The "trolley problem" examines ethical decision-making by asking if redirecting a runaway trolley to kill one person instead of five is morally justified. Plato\'s "Cave" illustrates how limited perception shapes our understanding of reality. These mental exercises reveal underlying assumptions in our reasoning and help clarify abstract concepts without requiring physical experimentation.',
+  },
+  geology: {
+    heading: "Plate Tectonics",
+    content:
+      "The theory of plate tectonics explains how Earth's lithosphere is divided into massive plates that float on the semi-fluid asthenosphere below. As these plates interact, they create geological phenomena at their boundaries: convergent boundaries form mountains and trenches, divergent boundaries create mid-ocean ridges, and transform boundaries produce fault lines where earthquakes frequently occur. This constant movement reshapes continents over millions of years through the slow process of continental drift.",
+  },
+  astronomy: {
+    heading: "Stellar Evolution",
+    content:
+      "Stars follow predictable life cycles determined primarily by their initial mass. They form from collapsing clouds of gas and dust, then spend most of their lives in main sequence, fusing hydrogen into helium in their cores. Medium-sized stars like our Sun eventually expand into red giants before shedding outer layers as planetary nebulae and ending as white dwarfs. Massive stars experience more dramatic deaths through supernova explosions, potentially leaving behind neutron stars or black holes.",
+  },
+  linguistics: {
+    heading: "Universal Grammar",
+    content:
+      "Language acquisition follows remarkably similar patterns across all human cultures despite vast differences between languages. Children master complex grammatical rules without explicit instruction, suggesting an innate capacity for language. Noam Chomsky's theory of Universal Grammar proposes that humans possess biological brain structures specifically evolved for language learning. This explains why children can generate entirely new sentences never heard before and why certain grammatical features appear across unrelated languages worldwide.",
+  },
+  arthistory: {
+    heading: "Symbolism in Renaissance Art",
+    content:
+      "Renaissance artists embedded sophisticated symbolic systems in their work to communicate religious and philosophical ideas. Common motifs included specific flowers (lilies representing purity), animals (lambs symbolizing Christ), and objects (mirrors reflecting truth or vanity). Colors carried consistent meanings: blue for divinity, red for passion or sacrifice. Even composition followed symbolic principles, with hierarchical scaling making important figures physically larger. Understanding these visual codes reveals deeper layers of meaning beyond the surface aesthetics.",
+  },
+  publichealth: {
+    heading: "Herd Immunity",
+    content:
+      "Herd immunity protects communities when a sufficient percentage of the population becomes immune to a contagious disease, limiting pathogen transmission to vulnerable individuals. This threshold varies by disease based on its reproductive number (R₀)—measles requires approximately 95% immunity while influenza may need only 60%. Immunity can develop through infection or vaccination, but the latter minimizes harm while building protection. This concept explains why maintaining high vaccination rates protects even those who cannot receive vaccines due to medical conditions.",
+  },
+  musictheory: {
+    heading: "Modal Harmony",
+    content:
+      "Modal harmony organizes music around distinct scales (modes) that create characteristic emotional atmospheres despite using the same set of notes. The bright-sounding Lydian mode emphasizes the sharp fourth scale degree, creating an optimistic quality used in film scores and jazz. In contrast, the Phrygian mode's flat second note produces tension and exotic qualities found in flamenco music. These modal frameworks dominated Western music before the major-minor tonal system and have experienced revival in modern composition, especially in film soundtracks and progressive rock.",
+  },
+};
+
+// Icon mapping for topics
+const ICONS = {
+  // Original topics
+  networking: '<i class="fas fa-network-wired"></i>',
+  biology: '<i class="fas fa-dna"></i>',
+  physics: '<i class="fas fa-atom"></i>',
+  psychology: '<i class="fas fa-brain"></i>',
+  math: '<i class="fas fa-square-root-alt"></i>', // or "fas fa-calculator"
+
+  // New topics
+  computerscience: '<i class="fas fa-shield-alt"></i>', // for cryptography
+  philosophy: '<i class="fas fa-lightbulb"></i>',
+  geology: '<i class="fas fa-mountain"></i>',
+  astronomy: '<i class="fas fa-star"></i>',
+  linguistics: '<i class="fas fa-language"></i>',
+  arthistory: '<i class="fas fa-palette"></i>',
+  publichealth: '<i class="fas fa-medkit"></i>',
+  musictheory: '<i class="fas fa-music"></i>',
+
+  // Additional icons for other content types
+  extract: '<i class="fas fa-quote-right"></i>',
+  flashcard: '<i class="fas fa-sticky-note"></i>',
+};
+
 // ========================
 // LLM Integration Module
 // ========================
@@ -92,6 +159,7 @@ const ContentTreeManager = {
     // First add all topics
     ContentManager.sections.forEach((section) => {
       const topicId = section.id;
+      const originalTopicId = section.dataset.topic;
       const topicTitle =
         section.querySelector("h2")?.textContent || "Untitled Topic";
       const topicType = section.getAttribute("data-topic") || "";
@@ -100,7 +168,8 @@ const ContentTreeManager = {
       const topicElement = document.createElement("div");
       topicElement.className = "tree-item tree-topic";
       topicElement.setAttribute("data-id", topicId);
-      topicElement.textContent = topicTitle;
+      topicElement.setAttribute("data-topic", originalTopicId);
+      topicElement.innerHTML = `${ICONS[originalTopicId]} ${topicTitle}`;
 
       // Make it active if this is the current item
       if (currentItem && currentItem.id === topicId) {
@@ -1155,6 +1224,10 @@ const FlashcardManager = {
             <li>Use imagery where possible</li>
             <li>Keep answers concise (1-7 words)</li>
           </ul>
+          <div class="extracted-content">
+            <h4>Extract Text (for reference):</h4>
+            <div class="reference-text">${extractText}</div>
+          </div>
           <div class="form-group">
             <label>Question:</label>
             <textarea id="flashcard-question" rows="3" placeholder="Enter your question..."></textarea>
@@ -1162,10 +1235,6 @@ const FlashcardManager = {
           <div class="form-group">
             <label>Answer:</label>
             <textarea id="flashcard-answer" rows="3" placeholder="Enter the answer..."></textarea>
-          </div>
-          <div class="extracted-content">
-            <h4>Extract Text (for reference):</h4>
-            <div class="reference-text">${extractText}</div>
           </div>
           <div class="button-group">
             <button id="save-flashcard" class="flashcard-button">Save Flashcard</button>
@@ -1914,6 +1983,7 @@ const SearchManager = {
 
 // Initialize the application
 document.addEventListener("DOMContentLoaded", () => {
+  addTopics();
   // Initialize modules
   ContentManager.init();
   FlashcardManager.init();
@@ -1944,3 +2014,41 @@ document.addEventListener("DOMContentLoaded", () => {
     FlashcardManager.closeReviewModal();
   });
 });
+
+function addTopics() {
+  const contentContainer = document.getElementById("contentContainer");
+  const preset = 6;
+  Object.keys(TOPICS).forEach((topic, i) => {
+    const content = TOPICS[topic];
+    const index = i + preset;
+    const contentHtml = `<div class="content-section" id="topic${index}" data-topic="${topic}">
+                <span class="content-type type-topic">Topic</span>
+                <span class="topic-indicator topic-networking">${topic.toUpperCase()}</span>
+                <div class="content-header">
+                    <h2 contenteditable="true">${content.heading}</h2>
+                    <div class="edit-controls">
+                        <button class="edit-button"><i class="fas fa-edit"></i></button>
+                        <button onclick="renderContent('test${index}')" class="preview-button"><i
+                                class="fa fa-refresh"></i></button>
+                    </div>
+                </div>
+                <p id="test${index}" contenteditable="true">${
+      content.content
+    }</p>
+                <div class="extract-controls">
+                    <button class="extract-button" data-source="topic1"><i class="fas fa-scissors"></i> Create
+                        Extract from Selection</button>
+                    <button class="flashcard-generator-button"><i class="fas fa-brain"></i> Generate
+                        Flashcards</button>
+                </div>
+            </div>`;
+    contentContainer.insertAdjacentHTML("beforeend", contentHtml);
+  });
+}
+
+function renderContent(id) {
+  var el = document.getElementById(id);
+  var map = { amp: "&", lt: "<", gt: ">", quot: '"', "#039": "'" };
+  var html = el.innerHTML.replace(/&([^;]+);/g, (m, c) => map[c]);
+  el.innerHTML = html;
+}
