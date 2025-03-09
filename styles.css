@@ -1295,3 +1295,275 @@ p {
   justify-content: space-between;
   margin-top: 20px;
 }
+
+
+
+
+/* Enhanced Content Tree Styling */
+.content-tree {
+  margin-top: 10px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.tree-item {
+  padding: 8px 10px 8px 28px; /* Increase left padding for icons */
+  margin: 5px 0;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 0.9rem;
+  position: relative;
+  border-left: 3px solid transparent;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+}
+
+/* Remove the text prefixes and use icons instead */
+.tree-topic::before,
+.tree-extract::before,
+.tree-nested-extract::before,
+.tree-deep-nested-extract::before,
+.tree-flashcard::before {
+  font-family: 'Font Awesome 6 Free';
+  font-weight: 900;
+  position: absolute;
+  left: 8px;
+  color: inherit;
+}
+
+.tree-topic::before {
+  content: "\f02d"; /* book icon */
+  color: var(--primary-color);
+}
+
+.tree-extract::before {
+  content: "\f0c4"; /* scissors icon */
+  color: var(--extract-border);
+}
+
+.tree-nested-extract::before {
+  content: "\f54e"; /* layer group icon */
+  color: var(--nested-extract-border);
+}
+
+.tree-deep-nested-extract::before {
+  content: "\f542"; /* project diagram icon */
+  color: var(--deep-nested-border);
+}
+
+.tree-flashcard::before {
+  content: "\f2a1"; /* brain icon */
+  color: #4caf50;
+}
+
+/* Enhance hover and active states */
+.tree-item:hover {
+  transform: translateX(3px);
+  background-color: rgba(255, 255, 255, 0.7);
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.tree-item.active {
+  background-color: rgba(255, 255, 255, 0.9);
+  box-shadow: 0 0 0 1px var(--primary-color), 0 2px 4px rgba(0,0,0,0.2);
+  font-weight: 600;
+}
+
+/* Improve tree hierarchy visualization */
+.tree-topic {
+  margin-top: 12px;
+  font-weight: 600;
+  color: var(--primary-color);
+  border-left-color: var(--primary-color);
+  background-color: rgba(42, 82, 152, 0.05);
+}
+
+.tree-extract {
+  margin-left: 15px;
+  position: relative;
+  border-left-color: var(--extract-border);
+  background-color: rgba(255, 179, 0, 0.05);
+}
+
+.tree-nested-extract {
+  margin-left: 25px;
+  position: relative;
+  border-left-color: var(--nested-extract-border);
+  background-color: rgba(79, 195, 247, 0.05);
+}
+
+.tree-deep-nested-extract {
+  margin-left: 35px;
+  position: relative;
+  border-left-color: var(--deep-nested-border);
+  background-color: rgba(171, 71, 188, 0.05);
+}
+
+.tree-flashcard {
+  margin-left: 15px;
+  position: relative;
+  border-left-color: #4caf50;
+  background-color: rgba(76, 175, 80, 0.05);
+  font-style: italic;
+}
+
+/* Add connecting lines to show hierarchy */
+.tree-extract::after,
+.tree-nested-extract::after,
+.tree-deep-nested-extract::after,
+.tree-flashcard::after {
+  content: "";
+  position: absolute;
+  left: -10px;
+  top: -10px;
+  height: calc(100% + 10px);
+  width: 1px;
+  background-color: #e0e0e0;
+  z-index: 0;
+}
+
+/* Style scrollbar in tree container */
+.content-tree-container::-webkit-scrollbar {
+  width: 6px;
+}
+
+.content-tree-container::-webkit-scrollbar-track {
+  background: rgba(0,0,0,0.05);
+  border-radius: 10px;
+}
+
+.content-tree-container::-webkit-scrollbar-thumb {
+  background: rgba(0,0,0,0.2);
+  border-radius: 10px;
+}
+
+.content-tree-container::-webkit-scrollbar-thumb:hover {
+  background: rgba(0,0,0,0.3);
+}
+
+/* Additional topic indicators */
+.topic-literature {
+  background-color: #e8f5e9;
+  color: #2e7d32;
+}
+
+.topic-history {
+  background-color: #ede7f6;
+  color: #512da8;
+}
+
+.topic-chemistry {
+  background-color: #e1f5fe;
+  color: #0277bd;
+}
+
+/* Add animation effects */
+.tree-item {
+  transition: all 0.2s ease-out;
+}
+
+.tree-item:hover {
+  transform: translateX(3px);
+}
+
+.tree-item.active {
+  animation: pulse 1.5s infinite alternate;
+}
+
+@keyframes pulse {
+  from { box-shadow: 0 0 0 1px var(--primary-color), 0 2px 4px rgba(0,0,0,0.2); }
+  to { box-shadow: 0 0 0 2px var(--primary-color), 0 3px 6px rgba(0,0,0,0.3); }
+}
+
+/* Fix for overlapping buttons */
+.extract-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 10px;
+  width: 100%;
+}
+
+.extract-button, 
+.flashcard-generator-button,
+.manual-flashcard-button,
+.cloze-button {
+  flex: 0 0 auto;
+  padding: 8px 12px;
+  font-size: 0.9rem;
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0;
+  min-width: auto;
+}
+
+/* Ensure icons have consistent spacing */
+.extract-button i, 
+.flashcard-generator-button i,
+.manual-flashcard-button i,
+.cloze-button i {
+  margin-right: 6px;
+  font-size: 0.9rem;
+}
+
+/* Responsive adjustments for small screens */
+@media (max-width: 600px) {
+  .extract-controls {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .extract-button, 
+  .flashcard-generator-button,
+  .manual-flashcard-button,
+  .cloze-button {
+    width: 100%;
+    margin-bottom: 5px;
+  }
+}
+
+/* Fix flashcard control buttons overlap */
+.flashcard-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: center;
+  margin-top: 15px;
+}
+
+.flashcard-button {
+  flex: 0 1 auto;
+  padding: 8px 12px;
+  margin: 0;
+  font-size: 0.9rem;
+}
+
+/* Modal button fixes */
+.button-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: flex-end;
+}
+
+/* Additional spacing for content sections */
+.content-section, .extract, .flashcard {
+  margin-bottom: 25px;
+  padding-bottom: 20px;
+}
+
+/* Fix content header spacing */
+.content-header {
+  margin-bottom: 12px;
+}
+
+/* Ensure there's enough space for buttons */
+.edit-controls {
+  display: flex;
+  gap: 8px;
+  margin-left: 10px;
+}

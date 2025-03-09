@@ -153,6 +153,230 @@
                             Flashcards</button>
                     </div>
                 </div>
+            <!-- Literature Topic -->
+<div class="content-section" id="topic6" data-topic="literature">
+    <span class="content-type type-topic">Topic</span>
+    <span class="topic-indicator topic-literature">LITERATURE</span>
+    <div class="content-header">
+      <h2 contenteditable="true">Narrative Techniques</h2>
+      <div class="edit-controls">
+        <button class="edit-button"><i class="fas fa-edit"></i></button>
+      </div>
+    </div>
+    <p contenteditable="true">Literature uses various narrative techniques to engage readers. First-person narration creates intimacy with a character's perspective, while omniscient third-person allows authors to reveal multiple characters' thoughts and motivations.</p>
+    <div class="extract-controls">
+      <button class="extract-button" data-source="topic6"><i class="fas fa-scissors"></i> Create Extract from Selection</button>
+      <button class="flashcard-generator-button"><i class="fas fa-brain"></i> Generate Flashcards</button>
+    </div>
+  </div>
+  
+  <!-- History Topic -->
+  <div class="content-section" id="topic7" data-topic="history">
+    <span class="content-type type-topic">Topic</span>
+    <span class="topic-indicator topic-history">HISTORY</span>
+    <div class="content-header">
+      <h2 contenteditable="true">Industrial Revolution</h2>
+      <div class="edit-controls">
+        <button class="edit-button"><i class="fas fa-edit"></i></button>
+      </div>
+    </div>
+    <p contenteditable="true">The Industrial Revolution transformed manufacturing processes between 1760-1840. Beginning in Great Britain, it spread to Europe and North America, shifting production from hand methods to machine manufacturing and introducing new energy sources like steam power.</p>
+    <div class="extract-controls">
+      <button class="extract-button" data-source="topic7"><i class="fas fa-scissors"></i> Create Extract from Selection</button>
+      <button class="flashcard-generator-button"><i class="fas fa-brain"></i> Generate Flashcards</button>
+    </div>
+  </div>
+  
+  <!-- Chemistry Topic -->
+  <div class="content-section" id="topic8" data-topic="chemistry">
+    <span class="content-type type-topic">Topic</span>
+    <span class="topic-indicator topic-chemistry">CHEMISTRY</span>
+    <div class="content-header">
+      <h2 contenteditable="true">Chemical Bonds</h2>
+      <div class="edit-controls">
+        <button class="edit-button"><i class="fas fa-edit"></i></button>
+      </div>
+    </div>
+    <p contenteditable="true">Chemical bonds are the forces that hold atoms together in molecules. Ionic bonds involve electron transfer between atoms with significantly different electronegativities, while covalent bonds involve electron sharing between atoms with similar electronegativities.</p>
+    <div class="extract-controls">
+      <button class="extract-button" data-source="topic8"><i class="fas fa-scissors"></i> Create Extract from Selection</button>
+      <button class="flashcard-generator-button"><i class="fas fa-brain"></i> Generate Flashcards</button>
+    </div>
+  </div>
+  
+  <!-- Literature Extract -->
+  <div class="extract" id="extract-literature-1" data-topic="literature" data-source="topic6" data-level="0">
+    <span class="content-type type-extract">Extract</span>
+    <span class="extract-label">From <span class="parent-title">Narrative Techniques</span></span>
+    <div class="content-header">
+      <div class="edit-controls">
+        <button class="edit-button"><i class="fas fa-edit"></i></button>
+        <button class="delete-button"><i class="fas fa-trash"></i></button>
+      </div>
+    </div>
+    <p contenteditable="true">First-person narration creates intimacy with a character's perspective, while omniscient third-person allows authors to reveal multiple characters' thoughts and motivations.</p>
+    <div class="extract-controls">
+      <button class="extract-button" data-source="extract-literature-1"><i class="fas fa-scissors"></i> Create Extract from Selection</button>
+      <button class="flashcard-generator-button"><i class="fas fa-brain"></i> Generate Flashcards</button>
+    </div>
+  </div>
+  
+  <!-- Literature Flashcards -->
+  <div class="flashcard" id="card-lit-1" data-source="extract-literature-1">
+    <span class="content-type type-flashcard">Flashcard</span>
+    <div class="content-header">
+      <div class="edit-controls">
+        <button class="edit-button"><i class="fas fa-edit"></i></button>
+        <button class="delete-button"><i class="fas fa-trash"></i></button>
+      </div>
+    </div>
+    <div class="flashcard-question" contenteditable="true">What does first-person narration create between readers and characters?</div>
+    <div class="flashcard-answer" contenteditable="true">Intimacy</div>
+    <div class="flashcard-controls">
+      <button class="flashcard-button easy" data-card="card-lit-1">Easy (3m)</button>
+      <button class="flashcard-button medium" data-card="card-lit-1">Medium (1m)</button>
+      <button class="flashcard-button hard" data-card="card-lit-1">Hard (30s)</button>
+    </div>
+  </div>
+  
+  <!-- History Extract -->
+  <div class="extract" id="extract-history-1" data-topic="history" data-source="topic7" data-level="0">
+    <span class="content-type type-extract">Extract</span>
+    <span class="extract-label">From <span class="parent-title">Industrial Revolution</span></span>
+    <div class="content-header">
+      <div class="edit-controls">
+        <button class="edit-button"><i class="fas fa-edit"></i></button>
+        <button class="delete-button"><i class="fas fa-trash"></i></button>
+      </div>
+    </div>
+    <p contenteditable="true">Beginning in Great Britain, the Industrial Revolution spread to Europe and North America, shifting production from hand methods to machine manufacturing.</p>
+    <div class="extract-controls">
+      <button class="extract-button" data-source="extract-history-1"><i class="fas fa-scissors"></i> Create Extract from Selection</button>
+      <button class="flashcard-generator-button"><i class="fas fa-brain"></i> Generate Flashcards</button>
+    </div>
+  </div>
+  
+  <!-- History Nested Extract -->
+  <div class="extract" id="extract-history-2" data-topic="history" data-source="extract-history-1" data-level="1">
+    <span class="content-type type-extract">Extract</span>
+    <span class="extract-label">From <span class="parent-title">Industrial Revolution</span></span>
+    <div class="content-header">
+      <div class="edit-controls">
+        <button class="edit-button"><i class="fas fa-edit"></i></button>
+        <button class="delete-button"><i class="fas fa-trash"></i></button>
+      </div>
+    </div>
+    <p contenteditable="true">Shifting production from hand methods to machine manufacturing was a key characteristic of the Industrial Revolution.</p>
+    <div class="extract-controls">
+      <button class="extract-button" data-source="extract-history-2"><i class="fas fa-scissors"></i> Create Extract from Selection</button>
+      <button class="flashcard-generator-button"><i class="fas fa-brain"></i> Generate Flashcards</button>
+    </div>
+  </div>
+  
+  <!-- History Flashcards -->
+  <div class="flashcard" id="card-hist-1" data-source="extract-history-1">
+    <span class="content-type type-flashcard">Flashcard</span>
+    <div class="content-header">
+      <div class="edit-controls">
+        <button class="edit-button"><i class="fas fa-edit"></i></button>
+        <button class="delete-button"><i class="fas fa-trash"></i></button>
+      </div>
+    </div>
+    <div class="flashcard-question" contenteditable="true">Where did the Industrial Revolution begin?</div>
+    <div class="flashcard-answer" contenteditable="true">Great Britain</div>
+    <div class="flashcard-controls">
+      <button class="flashcard-button easy" data-card="card-hist-1">Easy (3m)</button>
+      <button class="flashcard-button medium" data-card="card-hist-1">Medium (1m)</button>
+      <button class="flashcard-button hard" data-card="card-hist-1">Hard (30s)</button>
+    </div>
+  </div>
+  
+  <!-- Chemistry Extract -->
+  <div class="extract" id="extract-chem-1" data-topic="chemistry" data-source="topic8" data-level="0">
+    <span class="content-type type-extract">Extract</span>
+    <span class="extract-label">From <span class="parent-title">Chemical Bonds</span></span>
+    <div class="content-header">
+      <div class="edit-controls">
+        <button class="edit-button"><i class="fas fa-edit"></i></button>
+        <button class="delete-button"><i class="fas fa-trash"></i></button>
+      </div>
+    </div>
+    <p contenteditable="true">Ionic bonds involve electron transfer between atoms with significantly different electronegativities, while covalent bonds involve electron sharing between atoms with similar electronegativities.</p>
+    <div class="extract-controls">
+      <button class="extract-button" data-source="extract-chem-1"><i class="fas fa-scissors"></i> Create Extract from Selection</button>
+      <button class="flashcard-generator-button"><i class="fas fa-brain"></i> Generate Flashcards</button>
+    </div>
+  </div>
+  
+  <!-- Chemistry Flashcards -->
+  <div class="flashcard" id="card-chem-1" data-source="extract-chem-1">
+    <span class="content-type type-flashcard">Flashcard</span>
+    <div class="content-header">
+      <div class="edit-controls">
+        <button class="edit-button"><i class="fas fa-edit"></i></button>
+        <button class="delete-button"><i class="fas fa-trash"></i></button>
+      </div>
+    </div>
+    <div class="flashcard-question" contenteditable="true">What process occurs in ionic bonding?</div>
+    <div class="flashcard-answer" contenteditable="true">Electron transfer</div>
+    <div class="flashcard-controls">
+      <button class="flashcard-button easy" data-card="card-chem-1">Easy (3m)</button>
+      <button class="flashcard-button medium" data-card="card-chem-1">Medium (1m)</button>
+      <button class="flashcard-button hard" data-card="card-chem-1">Hard (30s)</button>
+    </div>
+  </div>
+  
+  <div class="flashcard" id="card-chem-2" data-source="extract-chem-1">
+    <span class="content-type type-flashcard">Flashcard</span>
+    <div class="content-header">
+      <div class="edit-controls">
+        <button class="edit-button"><i class="fas fa-edit"></i></button>
+        <button class="delete-button"><i class="fas fa-trash"></i></button>
+      </div>
+    </div>
+    <div class="flashcard-question" contenteditable="true">In covalent bonding, what happens between atoms with similar electronegativities?</div>
+    <div class="flashcard-answer" contenteditable="true">Electron sharing</div>
+    <div class="flashcard-controls">
+      <button class="flashcard-button easy" data-card="card-chem-2">Easy (3m)</button>
+      <button class="flashcard-button medium" data-card="card-chem-2">Medium (1m)</button>
+      <button class="flashcard-button hard" data-card="card-chem-2">Hard (30s)</button>
+    </div>
+  </div>
+  
+  <!-- Physics Extract (adding to existing topic) -->
+  <div class="extract" id="extract-physics-1" data-topic="physics" data-source="topic3" data-level="0">
+    <span class="content-type type-extract">Extract</span>
+    <span class="extract-label">From <span class="parent-title">Light Properties</span></span>
+    <div class="content-header">
+      <div class="edit-controls">
+        <button class="edit-button"><i class="fas fa-edit"></i></button>
+        <button class="delete-button"><i class="fas fa-trash"></i></button>
+      </div>
+    </div>
+    <p contenteditable="true">Light behaves both as a wave and as a particle (photon). This wave-particle duality is a core concept in quantum physics.</p>
+    <div class="extract-controls">
+      <button class="extract-button" data-source="extract-physics-1"><i class="fas fa-scissors"></i> Create Extract from Selection</button>
+      <button class="flashcard-generator-button"><i class="fas fa-brain"></i> Generate Flashcards</button>
+    </div>
+  </div>
+  
+  <!-- Physics Flashcard -->
+  <div class="flashcard" id="card-phys-1" data-source="extract-physics-1">
+    <span class="content-type type-flashcard">Flashcard</span>
+    <div class="content-header">
+      <div class="edit-controls">
+        <button class="edit-button"><i class="fas fa-edit"></i></button>
+        <button class="delete-button"><i class="fas fa-trash"></i></button>
+      </div>
+    </div>
+    <div class="flashcard-question" contenteditable="true">What is the name of light when considered as a particle?</div>
+    <div class="flashcard-answer" contenteditable="true">Photon</div>
+    <div class="flashcard-controls">
+      <button class="flashcard-button easy" data-card="card-phys-1">Easy (3m)</button>
+      <button class="flashcard-button medium" data-card="card-phys-1">Medium (1m)</button>
+      <button class="flashcard-button hard" data-card="card-phys-1">Hard (30s)</button>
+    </div>
+  </div>
             </div>
 
             <!-- Navigation Controls -->
